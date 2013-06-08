@@ -1,0 +1,5 @@
+- Decide on initial feature set
+- Create script (Grunt?) to:
+  - run tests
+  - package app into zip
+- JsLint

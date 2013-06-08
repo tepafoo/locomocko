@@ -1,0 +1,20 @@
+{
+  "name": "locomocko-tests",
+  "version": "0.0.1",
+  "author": "Tepafoo <tepafoo@gmail.com>",
+  "description": "JSON mocking library for front-end JavaScript",
+  "contributors": [
+    {
+      "name": "Dogan Narinc",
+      "email": "tepafoo@gmail.com"
+    }
+  ],
+  "devDependencies": {
+    "karma": "*",
+    "mocha": "*"
+  },
+  "license": "Apache License, Version 2.0",
+  "engines": {
+    "node": ">=0.6"
+  }
+}
