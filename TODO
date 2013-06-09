@@ -3,3 +3,12 @@
   - run tests
   - package app into zip
 - JsLint
+- onError? (note: jqXHR responseText is a String)
+- only called once, on readyState 4?
+- jqXHR?
+- shouldMock when library not present
+- $.ajax() currently only implemented with "options" object
+- $.ajax() called when endpoint not implemented?
+- implement reset() method
+- anyMethod()
+- anyRequestData()

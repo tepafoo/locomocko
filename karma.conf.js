@@ -10,9 +10,9 @@ basePath = '';
 files = [
   MOCHA,
   MOCHA_ADAPTER,
-  'src/lib/underscore-min.1.4.4.js',
+  'src/lib/*.js',
   'src/locomocko.src.js',
-  'test/lib/chai.1.6.1.js',
+  'test/lib/*.js',
   'test/*Test.js'
 ];
 
