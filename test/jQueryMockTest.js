@@ -22,7 +22,7 @@ var assertResponseIsSuccess = function (textStatus, jqXHR) {
   assertResponseData = function (jqXHR, expectedResponseData, actualResponseData) {
     jqXHR.responseText.should.equal(JSON.stringify(expectedResponseData));
 
-    actualResponseData.should.equal(expectedResponseData);
+    JSON.stringify(actualResponseData).should.equal(JSON.stringify(expectedResponseData));
   },
   assertJQueryMocked = function (method, done, whenAndThen) {
     // given
@@ -35,26 +35,43 @@ var assertResponseIsSuccess = function (textStatus, jqXHR) {
     locomocko.whenUrl(expectedUrl).withMethod(method).thenRespond(expectedResponseData);
 
     // when and then
-    whenAndThen(expectedUrl, method, expectedResponseData, done);
+    whenAndThen(expectedUrl, method, null, expectedResponseData, done);
   },
-  assertJQueryMethodMockedWhenMockCalledMultipleTimes = function (assertJQueryMethodUnderTestCalled, done) {
+  assertJQueryMethodMockedWhenMockCalledMultipleTimesWithoutData = function (assertJQueryMethodUnderTestCalled, done) {
 // given
     var expectedUrl = 'someUrl',
-      expectedGetResponseData = {
+      expectedResponseData = {
         "lastResponseDataKey": "lastResponseDataValue"
       };
 
     locomocko.shouldMock('jQuery');
 
     locomocko.whenUrl(expectedUrl).withMethod('GET').thenRespond({"notExpectedResponseKey": "notExpectedResponseValue"});
-    locomocko.whenUrl(expectedUrl).withMethod('GET').thenRespond(expectedGetResponseData);
+    locomocko.whenUrl(expectedUrl).withMethod('GET').thenRespond(expectedResponseData);
 
     // when and then
-    assertJQueryMethodUnderTestCalled(expectedUrl, 'GET', expectedGetResponseData, done);
+    assertJQueryMethodUnderTestCalled(expectedUrl, 'GET', null, expectedResponseData, done);
+  },
+  assertJQueryMethodMockedWhenMockCalledMultipleTimesWithData = function (assertJQueryMethodUnderTestCalled, done) {
+    // given
+    var expectedUrl = 'someUrl',
+      requestData = {"requestKey": "requestValue"},
+      expectedResponseData = {
+        "lastResponseDataKey": "lastResponseDataValue"
+      };
+
+    locomocko.shouldMock('jQuery');
+
+    locomocko.whenUrl(expectedUrl).withMethod('GET').withData(requestData).thenRespond({"notExpectedResponseKey": "notExpectedResponseValue"});
+    locomocko.whenUrl(expectedUrl).withMethod('GET').withData(requestData).thenRespond(expectedResponseData);
+
+    // when and then
+    assertJQueryMethodUnderTestCalled(expectedUrl, 'GET', null, expectedResponseData, done);
   },
   assertJQueryMethodMockedForMultipleUrls = function (assertJQueryMethodCalled, done) {
 // given
-    var expectedFirstUrl = 'firstUrl',
+    var method = 'GET',
+      expectedFirstUrl = 'firstUrl',
       expectedFirstUrlGetResponseData = {
         "firstUrlGetResponseDataKey": "firstUrlGetResponseDataValue"
       },
@@ -68,19 +85,44 @@ var assertResponseIsSuccess = function (textStatus, jqXHR) {
       };
 
     locomocko.shouldMock('jQuery');
-
-    locomocko.whenUrl(expectedFirstUrl).withMethod('GET').thenRespond(expectedFirstUrlGetResponseData);
-    locomocko.whenUrl(expectedSecondUrl).withMethod('GET').thenRespond(expectedSecondUrlGetResponseData);
-    locomocko.whenUrl(expectedThirdUrl).withMethod('GET').thenRespond(expectedThirdUrlGetResponseData);
-
-    // when and then
-    assertJQueryMethodCalled(expectedFirstUrl, null, expectedFirstUrlGetResponseData, done);
+    locomocko.whenUrl(expectedFirstUrl).withMethod(method).thenRespond(expectedFirstUrlGetResponseData);
+    locomocko.whenUrl(expectedSecondUrl).withMethod(method).thenRespond(expectedSecondUrlGetResponseData);
+    locomocko.whenUrl(expectedThirdUrl).withMethod(method).thenRespond(expectedThirdUrlGetResponseData);
 
     // when and then
-    assertJQueryMethodCalled(expectedSecondUrl, null, expectedSecondUrlGetResponseData, done);
+    assertJQueryMethodCalled(expectedFirstUrl, method, null, expectedFirstUrlGetResponseData, done);
 
     // when and then
-    assertJQueryMethodCalled(expectedThirdUrl, null, expectedThirdUrlGetResponseData, done);
+    assertJQueryMethodCalled(expectedSecondUrl, method, null, expectedSecondUrlGetResponseData, done);
+
+    // when and then
+    assertJQueryMethodCalled(expectedThirdUrl, method, null, expectedThirdUrlGetResponseData, done);
+  },
+  assertJQueryMethodMockedForSameUrlWithMultipleRequestData = function (method, jQueryMethod, done) {
+    var expectedUrl = 'someUrl',
+      firstRequestData = {
+        "firstRequestDataKey": "firstRequestDataValue"
+      },
+      expectedFirstResponseData = {
+        "firstResponseDataKey": "firstResponseDataValue"
+      },
+      secondRequestData = {
+        "secondRequestDataKey": "secondRequestDataValue"
+      },
+      expectedSecondResponseData = {
+        "secondResponseDataKey": "secondResponseDataValue"
+      };
+
+    locomocko.shouldMock('jQuery');
+
+    locomocko.whenUrl(expectedUrl).withMethod(method).withData(firstRequestData).thenRespond(expectedFirstResponseData);
+    locomocko.whenUrl(expectedUrl).withMethod(method).withData(secondRequestData).thenRespond(expectedSecondResponseData);
+
+    // when and then
+    jQueryMethod(expectedUrl, method, firstRequestData, expectedFirstResponseData, done);
+
+    // when and then
+    jQueryMethod(expectedUrl, method, secondRequestData, expectedSecondResponseData, done);
   },
 
 //
@@ -91,10 +133,11 @@ var assertResponseIsSuccess = function (textStatus, jqXHR) {
   assertJQueryAjaxMocked = function (method, done) {
     assertJQueryMocked(method, done, assertJQueryAjaxCalled);
   },
-  assertJQueryAjaxCalled = function (expectedUrl, method, expectedResponseData, done) {
+  assertJQueryAjaxCalled = function (expectedUrl, method, requestData, expectedResponseData, done) {
     $.ajax({
       url: expectedUrl,
       type: method,
+      data: requestData,
       dataType: 'json',
       success: function (data, textStatus, jqXHR) {
         assertResponseIsSuccess(textStatus, jqXHR);
@@ -111,8 +154,8 @@ var assertResponseIsSuccess = function (textStatus, jqXHR) {
   assertJQueryGetMocked = function (done) {
     assertJQueryMocked('GET', done, assertJQueryGetCalled);
   },
-  assertJQueryGetCalled = function (expectedUrl, method, expectedResponseData, done) {
-    $.get(expectedUrl, function (data, textStatus, jqXHR) {
+  assertJQueryGetCalled = function (expectedUrl, method, requestData, expectedResponseData, done) {
+    $.get(expectedUrl, requestData, function (data, textStatus, jqXHR) {
       assertResponseIsSuccess(textStatus, jqXHR);
       assertResponseData(jqXHR, expectedResponseData, data);
       done();
@@ -126,8 +169,8 @@ var assertResponseIsSuccess = function (textStatus, jqXHR) {
   assertJQueryGetJSONMocked = function (done) {
     assertJQueryMocked('GET', done, assertJQueryGetJSONCalled);
   },
-  assertJQueryGetJSONCalled = function (expectedUrl, method, expectedResponseData, done) {
-    $.getJSON(expectedUrl, function (data, textStatus, jqXHR) {
+  assertJQueryGetJSONCalled = function (expectedUrl, method, requestData, expectedResponseData, done) {
+    $.getJSON(expectedUrl, requestData, function (data, textStatus, jqXHR) {
       assertResponseIsSuccess(textStatus, jqXHR);
       assertResponseData(jqXHR, expectedResponseData, data);
       done();
@@ -157,8 +200,16 @@ describe('locomocko', function () {
 
     describe('combinations', function () {
 
-      it('uses the last mock setup when called multiple times for the same GET URL', function (done) {
-        assertJQueryMethodMockedWhenMockCalledMultipleTimes(assertJQueryAjaxCalled, done);
+      it('uses the last mock setup when called multiple times for the same GET URL without data', function (done) {
+        assertJQueryMethodMockedWhenMockCalledMultipleTimesWithoutData(assertJQueryAjaxCalled, done);
+      });
+
+      it('uses the last mock setup when called multiple times for the same GET URL with data', function (done) {
+        assertJQueryMethodMockedWhenMockCalledMultipleTimesWithData(assertJQueryAjaxCalled, done);
+      });
+
+      it('mocks jQuery.ajax() for the same GET URL but with different request payloads as expected', function (done) {
+        assertJQueryMethodMockedForSameUrlWithMultipleRequestData('GET', assertJQueryAjaxCalled, done);
       });
 
       it('separately mocks jQuery.ajax() GET, POST, PUT and DELETE on the same URL as expected', function (done) {
@@ -185,16 +236,16 @@ describe('locomocko', function () {
         locomocko.whenUrl(expectedUrl).withMethod('DELETE').thenRespond(expectedDeleteResponseData);
 
         // when and then
-        assertJQueryAjaxCalled(expectedUrl, 'GET', expectedGetResponseData, done);
+        assertJQueryAjaxCalled(expectedUrl, 'GET', null, expectedGetResponseData, done);
 
         // when and then
-        assertJQueryAjaxCalled(expectedUrl, 'POST', expectedPostResponseData, done);
+        assertJQueryAjaxCalled(expectedUrl, 'POST', null, expectedPostResponseData, done);
 
         // when and then
-        assertJQueryAjaxCalled(expectedUrl, 'PUT', expectedPutResponseData, done);
+        assertJQueryAjaxCalled(expectedUrl, 'PUT', null, expectedPutResponseData, done);
 
         // when and then
-        assertJQueryAjaxCalled(expectedUrl, 'DELETE', expectedDeleteResponseData, done);
+        assertJQueryAjaxCalled(expectedUrl, 'DELETE', null, expectedDeleteResponseData, done);
       });
 
       it('mocks jQuery.ajax() for a mixture of methods and URL as expected', function (done) {
@@ -223,16 +274,16 @@ describe('locomocko', function () {
         locomocko.whenUrl(expectedThirdUrl).withMethod('PUT').thenRespond(expectedThirdUrlPutResponseData);
 
         // when and then
-        assertJQueryAjaxCalled(expectedFirstUrl, 'GET', expectedFirstUrlGetResponseData, done);
+        assertJQueryAjaxCalled(expectedFirstUrl, 'GET', null, expectedFirstUrlGetResponseData, done);
 
         // when and then
-        assertJQueryAjaxCalled(expectedFirstUrl, 'DELETE', expectedFirstUrlDeleteResponseData, done);
+        assertJQueryAjaxCalled(expectedFirstUrl, 'DELETE', null, expectedFirstUrlDeleteResponseData, done);
 
         // when and then
-        assertJQueryAjaxCalled(expectedSecondUrl, 'POST', expectedSecondUrlPostResponseData, done);
+        assertJQueryAjaxCalled(expectedSecondUrl, 'POST', null, expectedSecondUrlPostResponseData, done);
 
         // when and then
-        assertJQueryAjaxCalled(expectedThirdUrl, 'PUT', expectedThirdUrlPutResponseData, done);
+        assertJQueryAjaxCalled(expectedThirdUrl, 'PUT', null, expectedThirdUrlPutResponseData, done);
       });
     });
   });
@@ -245,11 +296,19 @@ describe('locomocko', function () {
     });
 
     describe('combinations', function () {
-      it('uses the last mock setup when called multiple times for the same GET URL', function (done) {
-        assertJQueryMethodMockedWhenMockCalledMultipleTimes(assertJQueryGetCalled, done);
+      it('uses the last mock setup when called multiple times for the same GET URL without data', function (done) {
+        assertJQueryMethodMockedWhenMockCalledMultipleTimesWithoutData(assertJQueryGetCalled, done);
       });
 
-      it('mocks jQuery.get() for multiple URL as expected', function (done) {
+      it('uses the last mock setup when called multiple times for the same GET URL with data', function (done) {
+        assertJQueryMethodMockedWhenMockCalledMultipleTimesWithData(assertJQueryGetCalled, done);
+      });
+
+      it('mocks jQuery.get() for the same GET URL but with different request payloads as expected', function (done) {
+        assertJQueryMethodMockedForSameUrlWithMultipleRequestData('GET', assertJQueryGetCalled, done);
+      });
+
+      it('mocks jQuery.get() for multiple URLs as expected', function (done) {
         assertJQueryMethodMockedForMultipleUrls(assertJQueryGetCalled, done);
       });
     });
@@ -263,11 +322,19 @@ describe('locomocko', function () {
     });
 
     describe('combinations', function () {
-      it('uses the last mock setup when called multiple times for the same GET URL', function (done) {
-        assertJQueryMethodMockedWhenMockCalledMultipleTimes(assertJQueryGetJSONCalled, done);
+      it('uses the last mock setup when called multiple times for the same GET URL without data', function (done) {
+        assertJQueryMethodMockedWhenMockCalledMultipleTimesWithoutData(assertJQueryGetJSONCalled, done);
       });
 
-      it('mocks jQuery.getJSON() for multiple URL as expected', function (done) {
+      it('uses the last mock setup when called multiple times for the same GET URL with data', function (done) {
+        assertJQueryMethodMockedWhenMockCalledMultipleTimesWithData(assertJQueryGetJSONCalled, done);
+      });
+
+      it('mocks jQuery.getJSON() for the same GET URL but with different request payloads as expected', function (done) {
+        assertJQueryMethodMockedForSameUrlWithMultipleRequestData('GET', assertJQueryGetJSONCalled, done);
+      });
+
+      it('mocks jQuery.getJSON() for multiple URLs as expected', function (done) {
         assertJQueryMethodMockedForMultipleUrls(assertJQueryGetJSONCalled, done);
       });
     });

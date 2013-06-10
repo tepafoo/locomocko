@@ -9,13 +9,13 @@
 
 (function (window) {
 
-  var mockedEndpoints = [],
+  var mockedEndpoints = {},
     mockedLibraries = {
       jQueryAjax: function (options) {
-        var mockedEndpoint = findMockedEndpoint(options.url),
-          mockedMethod = mockedEndpoint.getMethod(options.type);
+        var mockedEndpoint = mockedEndpoints[options.url],
+          mockedMethod = mockedEndpoint.getMethod(options.type),
+          responseData = mockedMethod.getResponse(options.data).getData();
 
-        var responseData = mockedMethod.getResponseData();
         options.success(responseData, 'success', {
           readyState: 4,
           status: 200,
@@ -23,35 +23,54 @@
           responseText: JSON.stringify(responseData)
         })
       }
-    },
-    findMockedEndpoint = function (url) {
-      return _.find(mockedEndpoints, function (mockedEndpoint) {
-        return mockedEndpoint.getUrl() === url;
-      });
     };
 
-  function MockedMethod(method) {
-    this._method = method;
+  function MockedResponse() {
+  }
+
+  MockedResponse.prototype = {
+    thenRespond: function (data) {
+      this._data = data;
+      return this;
+    },
+
+    getData: function () {
+      return this._data;
+    }
+  };
+
+  function MockedMethod() {
+    this._responses = {};
   }
 
   MockedMethod.prototype = {
     withData: function (data) {
-      this._requestData = data;
-      return this;
+      var response;
+      var normalized = this._normalize(data);
+      if (this._responses.hasOwnProperty(normalized)) {
+        response = this._responses[normalized];
+      } else {
+        response = new MockedResponse();
+        this._responses[normalized] = response;
+      }
+      return response;
     },
 
-    thenRespond: function (data) {
-      this._responseData = data;
-      return this;
+    // TODO -- replace this with a "withoutData()" method
+    thenRespond: function (responseData) {
+      return this.withData(null).thenRespond(responseData);
     },
 
-    getResponseData: function () {
-      return this._responseData;
+    getResponse: function (requestData) {
+      return this._responses[this._normalize(requestData)];
+    },
+
+    _normalize: function (data) {
+      return JSON.stringify(data);
     }
   };
 
-  function MockedEndpoint(url) {
-    this._url = url;
+  function MockedEndpoint() {
     this._methods = {};
   }
 
@@ -61,13 +80,9 @@
       if (this._methods.hasOwnProperty(normalized)) {
         return this._methods[normalized];
       } else {
-        this._methods[normalized] = new MockedMethod(normalized);
+        this._methods[normalized] = new MockedMethod();
         return this._methods[normalized];
       }
-    },
-
-    getUrl: function () {
-      return this._url;
     },
 
     getMethod: function (method) {
@@ -94,11 +109,13 @@
 
   LocoMocko.whenUrl = function (url) {
 
-    var mockedEndpoint = findMockedEndpoint(url);
+    var mockedEndpoint;
 
-    if (_.isUndefined(mockedEndpoint)) {
-      mockedEndpoint = new MockedEndpoint(url);
-      mockedEndpoints.push(mockedEndpoint);
+    if (!mockedEndpoints.hasOwnProperty(url)) {
+      mockedEndpoint = new MockedEndpoint();
+      mockedEndpoints[url] = mockedEndpoint;
+    } else {
+      mockedEndpoint = mockedEndpoints[url];
     }
 
     return mockedEndpoint;

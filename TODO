@@ -9,6 +9,7 @@
 - shouldMock when library not present
 - $.ajax() currently only implemented with "options" object
 - $.ajax() called when endpoint not implemented?
-- implement reset() method
+- implement reset() method and call between tests
 - anyMethod()
 - anyRequestData()
+- noRequestData()
