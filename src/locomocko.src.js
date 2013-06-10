@@ -13,7 +13,7 @@
     mockedLibraries = {
       jQueryAjax: function (options) {
         var mockedEndpoint = findMockedEndpoint(options.url),
-          mockedMethod = mockedEndpoint.getMethod(options.method);
+          mockedMethod = mockedEndpoint.getMethod(options.type);
 
         var responseData = mockedMethod.getResponseData();
         options.success(responseData, 'success', {
@@ -57,11 +57,12 @@
 
   MockedEndpoint.prototype = {
     withMethod: function (method) {
-      if (this._methods.hasOwnProperty(method)) {
-        return this._methods[method];
+      var normalized = this._normalize(method);
+      if (this._methods.hasOwnProperty(normalized)) {
+        return this._methods[normalized];
       } else {
-        this._methods[method] = new MockedMethod(method);
-        return this._methods[method];
+        this._methods[normalized] = new MockedMethod(normalized);
+        return this._methods[normalized];
       }
     },
 
@@ -70,7 +71,12 @@
     },
 
     getMethod: function (method) {
-      return this._methods[method];
+      var normalized = this._normalize(method);
+      return this._methods[normalized];
+    },
+
+    _normalize: function (method) {
+      return method.toUpperCase();
     }
   };
 
