@@ -9,7 +9,16 @@
 
 (function (window) {
 
+  // constants
   var NO_DATA = 'NO_DATA',
+    ANY_DATA = 'ANY_DATA',
+
+  // util methods
+    isNullOrUndefined = function (object) {
+      return object === undefined || object === null;
+    },
+
+  // other
     mockedEndpoints = {},
     libraryOriginals = {
       jQueryAjax: null
@@ -17,10 +26,16 @@
     libraryMocks = {
       jQueryAjax: function (options) {
         if (mockedEndpoints.hasOwnProperty(options.url)) {
-          var mockedEndpoint = mockedEndpoints[options.url],
-            mockedMethod = mockedEndpoint.getMethod(options.type),
-            requestData = options.hasOwnProperty('data') && options.data !== undefined ? options.data : NO_DATA,
-            responseData = mockedMethod.getResponse(requestData).getData();
+          var mockedMethod = mockedEndpoints[options.url].getMethod(options.type),
+            requestData = options.hasOwnProperty('data') && !isNullOrUndefined(options.data) ? options.data : NO_DATA,
+            response = mockedMethod.getResponse(requestData),
+            responseData;
+
+          if (isNullOrUndefined(response)) {
+            response = mockedMethod.getResponse(ANY_DATA);
+          }
+
+          responseData = response.getData();
 
           options.success(responseData, 'success', {
             readyState: 4,
@@ -69,9 +84,8 @@
       return this.withData(NO_DATA);
     },
 
-    // TODO -- replace this with a "withoutData()" method
-    thenRespond: function (responseData) {
-      return this.withData(null).thenRespond(responseData);
+    withAnyData: function () {
+      return this.withData(ANY_DATA);
     },
 
     getResponse: function (requestData) {

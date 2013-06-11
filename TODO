@@ -10,5 +10,3 @@
 - $.ajax() currently only implemented with "options" object
 - $.ajax() called when endpoint not implemented?
 - anyMethod()
-- anyRequestData()
-- noRequestData()

@@ -37,7 +37,7 @@ var NO_REQUEST_DATA = 'NO_REQUEST_DATA',
         "someResponseDataKey": "someResponseDataValue"
       };
 
-    locomocko.whenUrl(expectedUrl).withMethod(method).thenRespond(expectedResponseData);
+    locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond(expectedResponseData);
 
     // when and then
     whenAndThen(expectedUrl, method, null, expectedResponseData, done);
@@ -85,9 +85,9 @@ var NO_REQUEST_DATA = 'NO_REQUEST_DATA',
         "thirdUrlGetResponseDataKey": "thirdUrlGetResponseDataValue"
       };
 
-    locomocko.whenUrl(expectedFirstUrl).withMethod(method).thenRespond(expectedFirstUrlGetResponseData);
-    locomocko.whenUrl(expectedSecondUrl).withMethod(method).thenRespond(expectedSecondUrlGetResponseData);
-    locomocko.whenUrl(expectedThirdUrl).withMethod(method).thenRespond(expectedThirdUrlGetResponseData);
+    locomocko.whenUrl(expectedFirstUrl).withMethod(method).withAnyData().thenRespond(expectedFirstUrlGetResponseData);
+    locomocko.whenUrl(expectedSecondUrl).withMethod(method).withAnyData().thenRespond(expectedSecondUrlGetResponseData);
+    locomocko.whenUrl(expectedThirdUrl).withMethod(method).withAnyData().thenRespond(expectedThirdUrlGetResponseData);
 
     // when and then
     assertJQueryMethodCalled(expectedFirstUrl, method, null, expectedFirstUrlGetResponseData, done);
@@ -255,10 +255,10 @@ describe('locomocko', function () {
             "someDeleteResponseDataKey": "someDeleteResponseDataValue"
           };
 
-        locomocko.whenUrl(expectedUrl).withMethod('GET').thenRespond(expectedGetResponseData);
-        locomocko.whenUrl(expectedUrl).withMethod('POST').thenRespond(expectedPostResponseData);
-        locomocko.whenUrl(expectedUrl).withMethod('PUT').thenRespond(expectedPutResponseData);
-        locomocko.whenUrl(expectedUrl).withMethod('DELETE').thenRespond(expectedDeleteResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod('GET').withAnyData().thenRespond(expectedGetResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod('POST').withAnyData().thenRespond(expectedPostResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod('PUT').withAnyData().thenRespond(expectedPutResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod('DELETE').withAnyData().thenRespond(expectedDeleteResponseData);
 
         // when and then
         assertJQueryAjaxCalled(expectedUrl, 'GET', null, expectedGetResponseData, done);
@@ -291,10 +291,10 @@ describe('locomocko', function () {
             "thirdUrlPutResponseDataKey": "thirdUrlPutResponseDataValue"
           };
 
-        locomocko.whenUrl(expectedFirstUrl).withMethod('GET').thenRespond(expectedFirstUrlGetResponseData);
-        locomocko.whenUrl(expectedFirstUrl).withMethod('DELETE').thenRespond(expectedFirstUrlDeleteResponseData);
-        locomocko.whenUrl(expectedSecondUrl).withMethod('POST').thenRespond(expectedSecondUrlPostResponseData);
-        locomocko.whenUrl(expectedThirdUrl).withMethod('PUT').thenRespond(expectedThirdUrlPutResponseData);
+        locomocko.whenUrl(expectedFirstUrl).withMethod('GET').withAnyData().thenRespond(expectedFirstUrlGetResponseData);
+        locomocko.whenUrl(expectedFirstUrl).withMethod('DELETE').withAnyData().thenRespond(expectedFirstUrlDeleteResponseData);
+        locomocko.whenUrl(expectedSecondUrl).withMethod('POST').withAnyData().thenRespond(expectedSecondUrlPostResponseData);
+        locomocko.whenUrl(expectedThirdUrl).withMethod('PUT').withAnyData().thenRespond(expectedThirdUrlPutResponseData);
 
         // when and then
         assertJQueryAjaxCalled(expectedFirstUrl, 'GET', null, expectedFirstUrlGetResponseData, done);

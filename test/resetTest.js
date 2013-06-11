@@ -20,12 +20,11 @@ describe('locomocko', function () {
 
     locomocko.shouldMock('jQuery');
 
-    locomocko.whenUrl(url).withMethod(method).thenRespond({});
+    locomocko.whenUrl(url).withMethod(method).withAnyData().thenRespond({});
 
     $.ajax({
       url: url,
       type: method,
-      data: null,
       success: function () {
       }
     });
