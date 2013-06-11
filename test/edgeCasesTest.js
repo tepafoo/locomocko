@@ -7,11 +7,18 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+beforeEach(function(){
+  locomocko.shouldMock('jQuery');
+});
+
+afterEach(function(){
+  locomocko.reset();
+});
+
 describe('locomocko', function () {
   it('throws an error if URL not mocked', function () {
     //given
     var expectedUrl = 'notMockedUrl';
-    locomocko.shouldMock('jQuery');
 
     //when
     try {
