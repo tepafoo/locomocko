@@ -9,7 +9,8 @@
 
 (function (window) {
 
-  var mockedEndpoints = {},
+  var NO_DATA = 'NO_DATA',
+    mockedEndpoints = {},
     libraryOriginals = {
       jQueryAjax: null
     },
@@ -18,7 +19,8 @@
         if (mockedEndpoints.hasOwnProperty(options.url)) {
           var mockedEndpoint = mockedEndpoints[options.url],
             mockedMethod = mockedEndpoint.getMethod(options.type),
-            responseData = mockedMethod.getResponse(options.data).getData();
+            requestData = options.hasOwnProperty('data') && options.data !== undefined ? options.data : NO_DATA,
+            responseData = mockedMethod.getResponse(requestData).getData();
 
           options.success(responseData, 'success', {
             readyState: 4,
@@ -61,6 +63,10 @@
         this._responses[normalized] = response;
       }
       return response;
+    },
+
+    withoutData: function () {
+      return this.withData(NO_DATA);
     },
 
     // TODO -- replace this with a "withoutData()" method

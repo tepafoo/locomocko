@@ -7,12 +7,18 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+///
+//
+// constants
+//
+//
+var NO_REQUEST_DATA = 'NO_REQUEST_DATA',
 //
 //
 // common assertion methods
 //
 //
-var assertResponseIsSuccess = function (textStatus, jqXHR) {
+  assertResponseIsSuccess = function (textStatus, jqXHR) {
     textStatus.should.equal('success');
     _.isObject(jqXHR).should.be.true;
     jqXHR.readyState.should.equal(4);
@@ -43,11 +49,11 @@ var assertResponseIsSuccess = function (textStatus, jqXHR) {
         "lastResponseDataKey": "lastResponseDataValue"
       };
 
-    locomocko.whenUrl(expectedUrl).withMethod('GET').thenRespond({"notExpectedResponseKey": "notExpectedResponseValue"});
-    locomocko.whenUrl(expectedUrl).withMethod('GET').thenRespond(expectedResponseData);
+    locomocko.whenUrl(expectedUrl).withMethod('GET').withoutData().thenRespond({"notExpectedResponseKey": "notExpectedResponseValue"});
+    locomocko.whenUrl(expectedUrl).withMethod('GET').withoutData().thenRespond(expectedResponseData);
 
     // when and then
-    assertJQueryMethodUnderTestCalled(expectedUrl, 'GET', null, expectedResponseData, done);
+    assertJQueryMethodUnderTestCalled(expectedUrl, 'GET', NO_REQUEST_DATA, expectedResponseData, done);
   },
   assertJQueryMethodMockedWhenMockCalledMultipleTimesWithData = function (assertJQueryMethodUnderTestCalled, done) {
     // given
@@ -126,17 +132,22 @@ var assertResponseIsSuccess = function (textStatus, jqXHR) {
     assertJQueryMocked(method, done, assertJQueryAjaxCalled);
   },
   assertJQueryAjaxCalled = function (expectedUrl, method, requestData, expectedResponseData, done) {
-    $.ajax({
+    var options = {
       url: expectedUrl,
       type: method,
-      data: requestData,
       dataType: 'json',
       success: function (data, textStatus, jqXHR) {
         assertResponseIsSuccess(textStatus, jqXHR);
         assertResponseData(jqXHR, expectedResponseData, data);
         done();
       }
-    });
+    };
+
+    if (requestData !== NO_REQUEST_DATA) {
+      options.data = requestData;
+    }
+
+    $.ajax(options);
   },
 //
 //
@@ -147,11 +158,19 @@ var assertResponseIsSuccess = function (textStatus, jqXHR) {
     assertJQueryMocked('GET', done, assertJQueryGetCalled);
   },
   assertJQueryGetCalled = function (expectedUrl, method, requestData, expectedResponseData, done) {
-    $.get(expectedUrl, requestData, function (data, textStatus, jqXHR) {
-      assertResponseIsSuccess(textStatus, jqXHR);
-      assertResponseData(jqXHR, expectedResponseData, data);
-      done();
-    }, 'json');
+    if (requestData === NO_REQUEST_DATA) {
+      $.get(expectedUrl, function (data, textStatus, jqXHR) {
+        assertResponseIsSuccess(textStatus, jqXHR);
+        assertResponseData(jqXHR, expectedResponseData, data);
+        done();
+      }, 'json');
+    } else {
+      $.get(expectedUrl, requestData, function (data, textStatus, jqXHR) {
+        assertResponseIsSuccess(textStatus, jqXHR);
+        assertResponseData(jqXHR, expectedResponseData, data);
+        done();
+      }, 'json');
+    }
   },
 //
 //
@@ -162,18 +181,26 @@ var assertResponseIsSuccess = function (textStatus, jqXHR) {
     assertJQueryMocked('GET', done, assertJQueryGetJSONCalled);
   },
   assertJQueryGetJSONCalled = function (expectedUrl, method, requestData, expectedResponseData, done) {
-    $.getJSON(expectedUrl, requestData, function (data, textStatus, jqXHR) {
-      assertResponseIsSuccess(textStatus, jqXHR);
-      assertResponseData(jqXHR, expectedResponseData, data);
-      done();
-    });
+    if (requestData === NO_REQUEST_DATA) {
+      $.getJSON(expectedUrl, function (data, textStatus, jqXHR) {
+        assertResponseIsSuccess(textStatus, jqXHR);
+        assertResponseData(jqXHR, expectedResponseData, data);
+        done();
+      });
+    } else {
+      $.getJSON(expectedUrl, requestData, function (data, textStatus, jqXHR) {
+        assertResponseIsSuccess(textStatus, jqXHR);
+        assertResponseData(jqXHR, expectedResponseData, data);
+        done();
+      });
+    }
   };
 
-beforeEach(function(){
+beforeEach(function () {
   locomocko.shouldMock('jQuery');
 });
 
-afterEach(function(){
+afterEach(function () {
   locomocko.reset();
 });
 
@@ -318,7 +345,7 @@ describe('locomocko', function () {
     });
 
     describe('combinations', function () {
-      it('uses the last mock setup when called multiple times for the same GET URL without data', function (done) {
+      it('uses the last jQuery.getJSON() mock setup when called multiple times for the same GET URL without data', function (done) {
         assertJQueryMethodMockedWhenMockCalledMultipleTimesWithoutData(assertJQueryGetJSONCalled, done);
       });
 
