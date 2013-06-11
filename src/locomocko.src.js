@@ -10,18 +10,25 @@
 (function (window) {
 
   var mockedEndpoints = {},
-    mockedLibraries = {
+    libraryOriginals = {
+      jQueryAjax: null
+    },
+    libraryMocks = {
       jQueryAjax: function (options) {
-        var mockedEndpoint = mockedEndpoints[options.url],
-          mockedMethod = mockedEndpoint.getMethod(options.type),
-          responseData = mockedMethod.getResponse(options.data).getData();
+        if (mockedEndpoints.hasOwnProperty(options.url)) {
+          var mockedEndpoint = mockedEndpoints[options.url],
+            mockedMethod = mockedEndpoint.getMethod(options.type),
+            responseData = mockedMethod.getResponse(options.data).getData();
 
-        options.success(responseData, 'success', {
-          readyState: 4,
-          status: 200,
-          statusText: 'OK',
-          responseText: JSON.stringify(responseData)
-        })
+          options.success(responseData, 'success', {
+            readyState: 4,
+            status: 200,
+            statusText: 'OK',
+            responseText: JSON.stringify(responseData)
+          });
+        } else {
+          throw new Error('Please mock endpoint: ' + options.url);
+        }
       }
     };
 
@@ -103,8 +110,14 @@
 
   LocoMocko.shouldMock = function (library) {
     if (library === 'jQuery') {
-      $.ajax = mockedLibraries.jQueryAjax;
+      libraryOriginals.jQueryAjax = $.ajax;
+      $.ajax = libraryMocks.jQueryAjax;
     }
+  };
+
+  LocoMocko.reset = function () {
+    $.ajax = libraryOriginals.jQueryAjax;
+    mockedEndpoints = {};
   };
 
   LocoMocko.whenUrl = function (url) {
