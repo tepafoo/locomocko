@@ -11,4 +11,3 @@
 - $.ajax() called when endpoint not implemented?
 - anyMethod()
 - modify request/response headers?
-- remove need for underscore.js by writing helper methods for isUndefined, isNull, etc
