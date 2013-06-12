@@ -10,7 +10,6 @@ basePath = '';
 files = [
   MOCHA,
   MOCHA_ADAPTER,
-  'src/lib/*.js',
   'src/locomocko.src.js',
   'test/lib/*.js',
   'test/*Test.js',
