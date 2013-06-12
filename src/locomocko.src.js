@@ -15,7 +15,7 @@
 
   // util methods
     isNullOrUndefined = function (object) {
-      return object === undefined || object === null;
+      return typeof object === 'undefined' || object === null;
     },
 
   // other
