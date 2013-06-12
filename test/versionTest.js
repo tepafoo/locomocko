@@ -7,8 +7,6 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-chai.should();
-
 describe('locomocko', function () {
   it('should have correct version', function () {
     locomocko.version.should.equal('0.0.1');

@@ -13,7 +13,8 @@ files = [
   'src/lib/*.js',
   'src/locomocko.src.js',
   'test/lib/*.js',
-  'test/*Test.js'
+  'test/*Test.js',
+  'test/*/*Test.js'
 ];
 
 
