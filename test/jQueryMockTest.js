@@ -122,6 +122,46 @@ var NO_REQUEST_DATA = 'NO_REQUEST_DATA',
     // when and then
     jQueryMethod(expectedUrl, method, secondRequestData, expectedSecondResponseData, done);
   },
+  assertJQueryMethodMockedWithDataAndWithAnyDataAndWithoutData = function (assertJQueryMethodCalled, done) {
+// given
+    var method = 'GET',
+      expectedUrl = 'someUrl',
+      firstRequestData = {
+        "someFirstRequestDataKey": "someFirstRequestDataValue"
+      },
+      expectedFirstResponseData = {
+        "someFirstResponseDataKey": "someFirstResponseDataValue"
+      },
+      expectedSecondResponseData = {
+        "someSecondResponseDataKey": "someSecondResponseDataValue"
+      },
+      expectedThirdResponseData = {
+        "someThirdResponseDataKey": "someThirdResponseDataValue"
+      },
+      fourthRequestData = {
+        "someFourthRequestDataKey": "someFourthRequestDataValue"
+      },
+      expectedFourthResponseData = {
+        "someFourthResponseDataKey": "someFourthResponseDataValue"
+      };
+
+    locomocko.whenUrl(expectedUrl).withMethod(method).withData(firstRequestData).thenRespond(expectedFirstResponseData);
+    locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond(expectedSecondResponseData);
+    locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().thenRespond(expectedThirdResponseData);
+    locomocko.whenUrl(expectedUrl).withMethod(method).withData(fourthRequestData).thenRespond(expectedFourthResponseData);
+
+    // when and then
+    assertJQueryMethodCalled(expectedUrl, method, firstRequestData, expectedFirstResponseData, done);
+
+    // when and then
+    assertJQueryMethodCalled(expectedUrl, method, {"anyKey": "anyValue"}, expectedSecondResponseData, done);
+
+    // when and then
+    assertJQueryMethodCalled(expectedUrl, method, NO_REQUEST_DATA, expectedSecondResponseData, done);
+
+    // when and then
+    assertJQueryMethodCalled(expectedUrl, method, fourthRequestData, expectedFourthResponseData, done);
+  },
 
 //
 //
@@ -308,6 +348,10 @@ describe('locomocko', function () {
         // when and then
         assertJQueryAjaxCalled(expectedThirdUrl, 'PUT', null, expectedThirdUrlPutResponseData, done);
       });
+
+      it('mocks jQuery.ajax() for a mixture of withData(), withAnyData() and  withoutData() on the same URL as expected', function (done) {
+        assertJQueryMethodMockedWithDataAndWithAnyDataAndWithoutData(assertJQueryAjaxCalled, done);
+      });
     });
   });
 
@@ -334,6 +378,10 @@ describe('locomocko', function () {
       it('mocks jQuery.get() for multiple URLs as expected', function (done) {
         assertJQueryMethodMockedForMultipleUrls(assertJQueryGetCalled, done);
       });
+
+      it('mocks jQuery.get() for a mixture of withData(), withAnyData() and  withoutData() on the same URL as expected', function (done) {
+        assertJQueryMethodMockedWithDataAndWithAnyDataAndWithoutData(assertJQueryGetCalled, done);
+      });
     });
   });
 
@@ -359,6 +407,10 @@ describe('locomocko', function () {
 
       it('mocks jQuery.getJSON() for multiple URLs as expected', function (done) {
         assertJQueryMethodMockedForMultipleUrls(assertJQueryGetJSONCalled, done);
+      });
+
+      it('mocks jQuery.get() for a mixture of withData(), withAnyData() and  withoutData() on the same URL as expected', function (done) {
+        assertJQueryMethodMockedWithDataAndWithAnyDataAndWithoutData(assertJQueryGetJSONCalled, done);
       });
     });
   });
