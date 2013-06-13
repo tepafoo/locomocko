@@ -30,14 +30,16 @@
     },
     libraryMocks = {
       jQueryAjax: function (options) {
+        var mockedMethod, requestData, requestHeaders, response, responseData;
+
         if (!mockedEndpoints.hasOwnProperty(options.url)) {
           throw new Error('Please mock endpoint: ' + options.url);
         }
-        var mockedMethod = mockedEndpoints[options.url].getMethod(options.type),
-          requestData = options.hasOwnProperty('data') && !isNullOrUndefined(options.data) ? options.data : NO_DATA,
-          requestHeaders = isObject(options.headers) ? options.headers : NO_HEADERS,
-          response = mockedMethod.getResponse(requestHeaders, requestData),
-          responseData;
+
+        requestData = options.hasOwnProperty('data') && !isNullOrUndefined(options.data) ? options.data : NO_DATA;
+        requestHeaders = isObject(options.headers) ? options.headers : NO_HEADERS;
+        mockedMethod = mockedEndpoints[options.url].getMethod(options.type);
+        response = mockedMethod.getResponse(requestHeaders, requestData);
 
         if (isNullOrUndefined(response)) {
           response = mockedMethod.getResponse(requestHeaders, ANY_DATA);
@@ -89,18 +91,15 @@
     },
 
     withData: function (data) {
-      var response,
-        normalized = MockedMethod._normalize(this._currentHeaders, data);
-      if (this._responses.hasOwnProperty(normalized)) {
-        response = this._responses[normalized];
-      } else {
-        response = new MockedResponse();
-        this._responses[normalized] = response;
+      var normalized = MockedMethod._normalize(this._currentHeaders, data);
+
+      if (!this._responses.hasOwnProperty(normalized)) {
+        this._responses[normalized] = new MockedResponse();
       }
 
       this._resetCurrentHeaders();
 
-      return response;
+      return this._responses[normalized];
     },
 
     withoutData: function () {
@@ -131,12 +130,12 @@
   MockedEndpoint.prototype = {
     withMethod: function (method) {
       var normalized = MockedEndpoint._normalize(method);
-      if (this._methods.hasOwnProperty(normalized)) {
-        return this._methods[normalized];
-      } else {
+
+      if (!this._methods.hasOwnProperty(normalized)) {
         this._methods[normalized] = new MockedMethod();
-        return this._methods[normalized];
       }
+
+      return this._methods[normalized];
     },
 
     getMethod: function (method) {
@@ -169,16 +168,11 @@
 
   LocoMocko.whenUrl = function (url) {
 
-    var mockedEndpoint;
-
     if (!mockedEndpoints.hasOwnProperty(url)) {
-      mockedEndpoint = new MockedEndpoint();
-      mockedEndpoints[url] = mockedEndpoint;
-    } else {
-      mockedEndpoint = mockedEndpoints[url];
+      mockedEndpoints[url] = new MockedEndpoint();
     }
 
-    return mockedEndpoint;
+    return mockedEndpoints[url];
   };
 
 
