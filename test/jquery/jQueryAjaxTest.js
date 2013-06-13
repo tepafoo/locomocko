@@ -90,6 +90,18 @@ var NO_REQUEST_DATA = 'NO_REQUEST_DATA',
     }
 
     $.ajax(options);
+  },
+  assertJQueryAjaxMockedWithoutHeaders = function (method, done) {
+// given
+    var expectedUrl = 'someUrl',
+      expectedResponseData = {
+        "someResponseDataKey": "someResponseDataValue"
+      };
+
+    locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withAnyData().thenRespond(expectedResponseData);
+
+    // when and then
+    assertJQueryAjaxCalled(expectedUrl, method, NO_REQUEST_DATA, expectedResponseData, done);
   };
 
 beforeEach(function () {
@@ -124,7 +136,7 @@ describe('locomocko', function () {
         assertJQueryAjaxMockedWithRequestHeaders('GET', done);
       });
 
-      it('mocks jQuery.ajax() POT with predefined request headers as expected', function (done) {
+      it('mocks jQuery.ajax() POST with predefined request headers as expected', function (done) {
         assertJQueryAjaxMockedWithRequestHeaders('POST', done);
       });
 
@@ -135,6 +147,23 @@ describe('locomocko', function () {
       it('mocks jQuery.ajax() DELETE with predefined request headers as expected', function (done) {
         assertJQueryAjaxMockedWithRequestHeaders('DELETE', done);
       });
+
+      it('mocks jQuery.ajax() GET withoutHeaders() as expected', function (done) {
+        assertJQueryAjaxMockedWithoutHeaders('GET', done);
+      });
+
+      it('mocks jQuery.ajax() POST withoutHeaders() as expected', function (done) {
+        assertJQueryAjaxMockedWithoutHeaders('POST', done);
+      });
+
+      it('mocks jQuery.ajax() PUT withoutHeaders() as expected', function (done) {
+        assertJQueryAjaxMockedWithoutHeaders('PUT', done);
+      });
+
+      it('mocks jQuery.ajax() DELETE withoutHeaders() as expected', function (done) {
+        assertJQueryAjaxMockedWithoutHeaders('DELETE', done);
+      });
+
     });
 
     describe('combinations', function () {
@@ -312,7 +341,7 @@ describe('locomocko', function () {
             "requestDataKey": "requestDataValue"
           },
           firstRequestHeaders = {
-          "firstRequestHeaderKey": "firstRequestHeaderValue"
+            "firstRequestHeaderKey": "firstRequestHeaderValue"
           },
           expectedFirstResponseData = {
             "firstResponseDataKey": "firstResponseDataValue"

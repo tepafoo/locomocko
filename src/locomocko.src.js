@@ -83,6 +83,11 @@
       return this;
     },
 
+    withoutHeaders: function () {
+      this._resetCurrentHeaders();
+      return this;
+    },
+
     withData: function (data) {
       var response,
         normalized = MockedMethod._normalize(this._currentHeaders, data);

@@ -76,6 +76,20 @@ describe('locomocko', function () {
           e.message.indexOf('Please mock endpoint').should.not.equal(-1);
         }
       });
+
+      it('mocks jQuery.get() withoutHeaders() as expected', function (done) {
+        // given
+        var method = 'GET',
+          expectedUrl = 'someUrl',
+          expectedResponseData = {
+            "someResponseDataKey": "someResponseDataValue"
+          };
+
+        locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withAnyData().thenRespond(expectedResponseData);
+
+        // when and then
+        assertJQueryGetCalled(expectedUrl, NO_REQUEST_DATA, expectedResponseData, done);
+      });
     });
 
     describe('combinations', function () {
