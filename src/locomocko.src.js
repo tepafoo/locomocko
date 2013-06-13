@@ -30,28 +30,31 @@
     },
     libraryMocks = {
       jQueryAjax: function (options) {
-        if (mockedEndpoints.hasOwnProperty(options.url)) {
-          var mockedMethod = mockedEndpoints[options.url].getMethod(options.type),
-            requestData = options.hasOwnProperty('data') && !isNullOrUndefined(options.data) ? options.data : NO_DATA,
-            requestHeaders = isObject(options.headers) ? options.headers: NO_HEADERS,
-            response = mockedMethod.getResponse(requestHeaders, requestData),
-            responseData;
-
-          if (isNullOrUndefined(response)) {
-            response = mockedMethod.getResponse(requestHeaders, ANY_DATA);
-          }
-
-          responseData = response.getData();
-
-          options.success(responseData, 'success', {
-            readyState: 4,
-            status: 200,
-            statusText: 'OK',
-            responseText: JSON.stringify(responseData)
-          });
-        } else {
+        if (!mockedEndpoints.hasOwnProperty(options.url)) {
           throw new Error('Please mock endpoint: ' + options.url);
         }
+        var mockedMethod = mockedEndpoints[options.url].getMethod(options.type),
+          requestData = options.hasOwnProperty('data') && !isNullOrUndefined(options.data) ? options.data : NO_DATA,
+          requestHeaders = isObject(options.headers) ? options.headers : NO_HEADERS,
+          response = mockedMethod.getResponse(requestHeaders, requestData),
+          responseData;
+
+        if (isNullOrUndefined(response)) {
+          response = mockedMethod.getResponse(requestHeaders, ANY_DATA);
+        }
+
+        if (isNullOrUndefined(response)) {
+          throw new Error('Please mock endpoint: ' + options.url + ' with method: ' + options.type + ' with headers: ' + options.headers + ' and data: ' + options.data);
+        }
+
+        responseData = response.getData();
+
+        options.success(responseData, 'success', {
+          readyState: 4,
+          status: 200,
+          statusText: 'OK',
+          responseText: JSON.stringify(responseData)
+        });
       }
     };
 
@@ -71,7 +74,7 @@
 
   function MockedMethod() {
     this._responses = {};
-    this._currentHeaders = NO_HEADERS;
+    this._resetCurrentHeaders();
   }
 
   MockedMethod.prototype = {
@@ -89,6 +92,9 @@
         response = new MockedResponse();
         this._responses[normalized] = response;
       }
+
+      this._resetCurrentHeaders();
+
       return response;
     },
 
@@ -102,6 +108,10 @@
 
     getResponse: function (requestHeaders, requestData) {
       return this._responses[MockedMethod._normalize(requestHeaders, requestData)];
+    },
+
+    _resetCurrentHeaders: function () {
+      this._currentHeaders = NO_HEADERS;
     }
   };
 

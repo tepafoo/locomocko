@@ -19,18 +19,14 @@ var NO_REQUEST_DATA = 'NO_REQUEST_DATA',
       jqXHR.responseText.should.equal(JSON.stringify(expectedResponseData));
 
       JSON.stringify(actualResponseData).should.equal(JSON.stringify(expectedResponseData));
+
+      done();
     };
 
     if (requestData === NO_REQUEST_DATA) {
-      $.get(expectedUrl, function (data, textStatus, jqXHR) {
-        assertResponse(data, textStatus, jqXHR);
-        done();
-      }, 'json');
+      $.get(expectedUrl, assertResponse, 'json');
     } else {
-      $.get(expectedUrl, requestData, function (data, textStatus, jqXHR) {
-        assertResponse(data, textStatus, jqXHR);
-        done();
-      }, 'json');
+      $.get(expectedUrl, requestData, assertResponse, 'json');
     }
   };
 
@@ -59,10 +55,31 @@ describe('locomocko', function () {
         // when and then
         assertJQueryGetCalled(expectedUrl, NO_REQUEST_DATA, expectedResponseData, done);
       });
+
+      it('does not mock jQuery.get() when setup with predefined request headers', function () {
+        // given
+        var method = 'GET',
+          expectedUrl = 'someUrl';
+        locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders({'blah': 'bloh'}).withAnyData().thenRespond({});
+
+        // when and then
+        try {
+          $.get(expectedUrl, function (data, textStatus, jqXHR) {
+            //fail if execution comes to this point
+            false.should.be.true;
+          }, 'json');
+
+          //fail if execution comes to this point
+          false.should.be.true;
+        } catch (e) {
+          //then
+          e.message.indexOf('Please mock endpoint').should.not.equal(-1);
+        }
+      });
     });
 
     describe('combinations', function () {
-      it('uses the last mock setup when called multiple times for the same GET URL without data', function (done) {
+      it('uses the last mock setup when called multiple times for the same URL without data', function (done) {
         // given
         var method = 'GET',
           expectedUrl = 'someUrl',
@@ -77,7 +94,7 @@ describe('locomocko', function () {
         assertJQueryGetCalled(expectedUrl, NO_REQUEST_DATA, expectedResponseData, done);
       });
 
-      it('uses the last mock setup when called multiple times for the same GET URL with data', function (done) {
+      it('uses the last mock setup when called multiple times for the same URL with data', function (done) {
         // given
         var method = 'GET',
           expectedUrl = 'someUrl',
@@ -93,7 +110,7 @@ describe('locomocko', function () {
         assertJQueryGetCalled(expectedUrl, requestData, expectedResponseData, done);
       });
 
-      it('mocks jQuery.get() for the same GET URL but with different request payloads as expected', function (done) {
+      it('mocks jQuery.get() for the same URL but with different request payloads as expected', function (done) {
         var method = 'GET',
           expectedUrl = 'someUrl',
           firstRequestData = {
@@ -188,6 +205,29 @@ describe('locomocko', function () {
 
         // when and then
         assertJQueryGetCalled(expectedUrl, fourthRequestData, expectedFourthResponseData, done);
+      });
+
+      it('mocks jQuery.get() for the same URL with same withoutData() but with different request headers as expected', function (done) {
+        var method = 'GET',
+          expectedUrl = 'someUrl',
+          firstRequestHeaders = {
+            "firstRequestHeaderKey": "firstRequestHeaderValue"
+          },
+          expectedFirstResponseData = {
+            "firstResponseDataKey": "firstResponseDataValue"
+          },
+          secondRequestHeaders = {
+            "secondRequestHeaderKey": "secondRequestHeaderValue"
+          },
+          expectedSecondResponseData = {
+            "secondResponseDataKey": "secondResponseDataValue"
+          };
+
+        locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(firstRequestHeaders).withoutData().thenRespond(expectedFirstResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().thenRespond(expectedSecondResponseData);
+
+        // when and then
+        assertJQueryGetCalled(expectedUrl, NO_REQUEST_DATA, expectedSecondResponseData, done);
       });
     });
   });
