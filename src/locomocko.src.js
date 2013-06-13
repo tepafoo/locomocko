@@ -130,7 +130,7 @@
 
   MockedEndpoint.prototype = {
     withMethod: function (method) {
-      var normalized = this._normalize(method);
+      var normalized = MockedEndpoint._normalize(method);
       if (this._methods.hasOwnProperty(normalized)) {
         return this._methods[normalized];
       } else {
@@ -140,13 +140,13 @@
     },
 
     getMethod: function (method) {
-      var normalized = this._normalize(method);
+      var normalized = MockedEndpoint._normalize(method);
       return this._methods[normalized];
-    },
-
-    _normalize: function (method) {
-      return method.toUpperCase();
     }
+  };
+
+  MockedEndpoint._normalize = function (method) {
+    return method.toUpperCase();
   };
 
 
