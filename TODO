@@ -8,6 +8,5 @@
 - jqXHR?
 - shouldMock when library not present
 - $.ajax() currently only implemented with "options" object
-- $.ajax() called when endpoint not implemented?
 - anyMethod()
 - modify request/response headers?
