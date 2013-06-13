@@ -10,12 +10,17 @@
 (function (window) {
 
   // constants
-  var NO_DATA = 'NO_DATA',
+  var NO_HEADERS = {},
+    NO_DATA = 'NO_DATA',
     ANY_DATA = 'ANY_DATA',
 
   // util methods
     isNullOrUndefined = function (object) {
       return typeof object === 'undefined' || object === null;
+    },
+
+    isObject = function (object) {
+      return Object.prototype.toString.call(object) === '[object Object]';
     },
 
   // other
@@ -28,11 +33,12 @@
         if (mockedEndpoints.hasOwnProperty(options.url)) {
           var mockedMethod = mockedEndpoints[options.url].getMethod(options.type),
             requestData = options.hasOwnProperty('data') && !isNullOrUndefined(options.data) ? options.data : NO_DATA,
-            response = mockedMethod.getResponse(requestData),
+            requestHeaders = isObject(options.headers) ? options.headers: NO_HEADERS,
+            response = mockedMethod.getResponse(requestHeaders, requestData),
             responseData;
 
           if (isNullOrUndefined(response)) {
-            response = mockedMethod.getResponse(ANY_DATA);
+            response = mockedMethod.getResponse(requestHeaders, ANY_DATA);
           }
 
           responseData = response.getData();
@@ -65,12 +71,18 @@
 
   function MockedMethod() {
     this._responses = {};
+    this._currentHeaders = NO_HEADERS;
   }
 
   MockedMethod.prototype = {
+    withHeaders: function (headers) {
+      this._currentHeaders = headers;
+      return this;
+    },
+
     withData: function (data) {
-      var response;
-      var normalized = this._normalize(data);
+      var response,
+        normalized = MockedMethod._normalize(this._currentHeaders, data);
       if (this._responses.hasOwnProperty(normalized)) {
         response = this._responses[normalized];
       } else {
@@ -88,13 +100,13 @@
       return this.withData(ANY_DATA);
     },
 
-    getResponse: function (requestData) {
-      return this._responses[this._normalize(requestData)];
-    },
-
-    _normalize: function (data) {
-      return JSON.stringify(data);
+    getResponse: function (requestHeaders, requestData) {
+      return this._responses[MockedMethod._normalize(requestHeaders, requestData)];
     }
+  };
+
+  MockedMethod._normalize = function (headers, data) {
+    return JSON.stringify(headers) + JSON.stringify(data);
   };
 
   function MockedEndpoint() {
