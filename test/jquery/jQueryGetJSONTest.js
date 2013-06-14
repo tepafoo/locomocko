@@ -20,7 +20,9 @@ var NO_REQUEST_DATA = 'NO_REQUEST_DATA',
 
       JSON.stringify(actualResponseData).should.equal(JSON.stringify(expectedResponseData));
 
-      done();
+      if (_.isFunction(done)) {
+        done();
+      }
     };
 
     if (requestData === NO_REQUEST_DATA) {
@@ -55,7 +57,7 @@ describe('locomocko', function () {
         assertJQueryGetJSONCalled(expectedUrl, NO_REQUEST_DATA, expectedResponseData, done);
       });
 
-      it('does not mock jQuery.getJSON() when setup with predefined request headers', function () {
+      it('does not mock when setup withHeaders()', function () {
         // given
         var method = 'GET',
           expectedUrl = 'someUrl';
@@ -76,23 +78,99 @@ describe('locomocko', function () {
         }
       });
 
-      it('mocks jQuery.get() withoutHeaders() as expected', function (done) {
-        // given
-        var method = 'GET',
-          expectedUrl = 'someUrl',
-          expectedResponseData = {
-            "someResponseDataKey": "someResponseDataValue"
-          };
+      describe('withoutHeaders() with{{Any/out}}Data()', function () {
+        it('mocks withoutHeaders() withAnyData() as expected', function (done) {
+          // given
+          var method = 'GET',
+            expectedUrl = 'someUrl',
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
 
-        locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withAnyData().thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withAnyData().thenRespond(expectedResponseData);
 
-        // when and then
-        assertJQueryGetJSONCalled(expectedUrl, NO_REQUEST_DATA, expectedResponseData, done);
+          // when and then
+          assertJQueryGetJSONCalled(expectedUrl, {"anayDataKey": "anyDataValue"}, expectedResponseData, done);
+        });
+
+        it('mocks withoutHeaders() withoutData() as expected', function (done) {
+          // given
+          var method = 'GET',
+            expectedUrl = 'someUrl',
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withoutData().thenRespond(expectedResponseData);
+
+          // when and then
+          assertJQueryGetJSONCalled(expectedUrl, NO_REQUEST_DATA, expectedResponseData, done);
+        });
+
+        it('mocks withoutHeaders() withData() as expected', function (done) {
+          // given
+          var method = 'GET',
+            expectedUrl = 'someUrl',
+            requestData = {"dataKey": "dataValue"},
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(requestData).thenRespond(expectedResponseData);
+
+          // when and then
+          assertJQueryGetJSONCalled(expectedUrl, requestData, expectedResponseData, done);
+        });
+      });
+
+      describe('withAnyHeaders() with{{Any/out}}Data()', function () {
+        it('mocks withAnyHeaders() withAnyData() as expected', function (done) {
+          // given
+          var method = 'GET',
+            expectedUrl = 'someUrl',
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withAnyData().thenRespond(expectedResponseData);
+
+          // when and then
+          assertJQueryGetJSONCalled(expectedUrl, {"anayDataKey": "anyDataValue"}, expectedResponseData, done);
+        });
+
+        it('mocks withAnyHeaders() withoutData() as expected', function (done) {
+          // given
+          var method = 'GET',
+            expectedUrl = 'someUrl',
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withoutData().thenRespond(expectedResponseData);
+
+          // when and then
+          assertJQueryGetJSONCalled(expectedUrl, NO_REQUEST_DATA, expectedResponseData, done);
+        });
+
+        it('mocks withAnyHeaders() withData() as expected', function (done) {
+          // given
+          var method = 'GET',
+            expectedUrl = 'someUrl',
+            requestData = {"dataKey": "dataValue"},
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(requestData).thenRespond(expectedResponseData);
+
+          // when and then
+          assertJQueryGetJSONCalled(expectedUrl, requestData, expectedResponseData, done);
+        });
       });
     });
 
     describe('combinations', function () {
-      it('uses the last jQuery.getJSON() mock setup when called multiple times for the same GET URL without data', function (done) {
+      it('uses the last mock setup when called multiple times for the same URL without data', function (done) {
         // given
         var method = 'GET',
           expectedUrl = 'someUrl',
@@ -108,7 +186,7 @@ describe('locomocko', function () {
 
       });
 
-      it('uses the last jQuery.getJSON() mock setup when called multiple times for the same GET URL with data', function (done) {
+      it('uses the last mock setup when called multiple times for the same URL with data', function (done) {
         // given
         var method = 'GET',
           expectedUrl = 'someUrl',
@@ -124,7 +202,7 @@ describe('locomocko', function () {
         assertJQueryGetJSONCalled(expectedUrl, requestData, expectedResponseData, done);
       });
 
-      it('mocks jQuery.getJSON() for the same GET URL but with different request payloads as expected', function (done) {
+      it('mocks for the same URL but with different request payloads', function (done) {
         var method = 'GET',
           expectedUrl = 'someUrl',
           firstRequestData = {
@@ -144,13 +222,13 @@ describe('locomocko', function () {
         locomocko.whenUrl(expectedUrl).withMethod(method).withData(secondRequestData).thenRespond(expectedSecondResponseData);
 
         // when and then
-        assertJQueryGetJSONCalled(expectedUrl, firstRequestData, expectedFirstResponseData, done);
+        assertJQueryGetJSONCalled(expectedUrl, firstRequestData, expectedFirstResponseData);
 
         // when and then
         assertJQueryGetJSONCalled(expectedUrl, secondRequestData, expectedSecondResponseData, done);
       });
 
-      it('mocks jQuery.getJSON() for multiple URLs as expected', function (done) {
+      it('mocks for multiple URLs', function (done) {
         // given
         var method = 'GET',
           expectedFirstUrl = 'firstUrl',
@@ -171,16 +249,16 @@ describe('locomocko', function () {
         locomocko.whenUrl(expectedThirdUrl).withMethod(method).withAnyData().thenRespond(expectedThirdUrlGetResponseData);
 
         // when and then
-        assertJQueryGetJSONCalled(expectedFirstUrl, NO_REQUEST_DATA, expectedFirstUrlGetResponseData, done);
+        assertJQueryGetJSONCalled(expectedFirstUrl, NO_REQUEST_DATA, expectedFirstUrlGetResponseData);
 
         // when and then
-        assertJQueryGetJSONCalled(expectedSecondUrl, NO_REQUEST_DATA, expectedSecondUrlGetResponseData, done);
+        assertJQueryGetJSONCalled(expectedSecondUrl, NO_REQUEST_DATA, expectedSecondUrlGetResponseData);
 
         // when and then
         assertJQueryGetJSONCalled(expectedThirdUrl, NO_REQUEST_DATA, expectedThirdUrlGetResponseData, done);
       });
 
-      it('mocks jQuery.getJSON() for a mixture of withData(), withAnyData() and  withoutData() on the same URL as expected', function (done) {
+      it('mocks for a mixture of with{{Any/out}}Data() on the same URL', function (done) {
         // given
         var method = 'GET',
           expectedUrl = 'someUrl',
@@ -209,20 +287,20 @@ describe('locomocko', function () {
         locomocko.whenUrl(expectedUrl).withMethod(method).withData(fourthRequestData).thenRespond(expectedFourthResponseData);
 
         // when and then
-        assertJQueryGetJSONCalled(expectedUrl, firstRequestData, expectedFirstResponseData, done);
+        assertJQueryGetJSONCalled(expectedUrl, firstRequestData, expectedFirstResponseData);
 
         // when and then
-        assertJQueryGetJSONCalled(expectedUrl, {"anyKey": "anyValue"}, expectedSecondResponseData, done);
+        assertJQueryGetJSONCalled(expectedUrl, {"anyKey": "anyValue"}, expectedSecondResponseData);
 
         // when and then
-        assertJQueryGetJSONCalled(expectedUrl, NO_REQUEST_DATA, expectedSecondResponseData, done);
+        assertJQueryGetJSONCalled(expectedUrl, NO_REQUEST_DATA, expectedThirdResponseData);
 
         // when and then
         assertJQueryGetJSONCalled(expectedUrl, fourthRequestData, expectedFourthResponseData, done);
 
       });
 
-      it('mocks jQuery.getJSON() for the same URL with same withoutData() but with different request headers as expected', function (done) {
+      it('mocks with same withoutData() but with different with{{Any/out}}Headers()', function (done) {
         var method = 'GET',
           expectedUrl = 'someUrl',
           firstRequestHeaders = {
@@ -240,6 +318,7 @@ describe('locomocko', function () {
 
         locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(firstRequestHeaders).withoutData().thenRespond(expectedFirstResponseData);
         locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().thenRespond(expectedSecondResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withoutData().thenRespond({"shouldNotBeReturned": "reallyNot"});
 
         // when and then
         assertJQueryGetJSONCalled(expectedUrl, NO_REQUEST_DATA, expectedSecondResponseData, done);

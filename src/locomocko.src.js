@@ -11,8 +11,9 @@
 
   // constants
   var NO_HEADERS = {},
-    NO_DATA = 'NO_DATA',
-    ANY_DATA = 'ANY_DATA',
+    ANY_HEADERS = 'LOCO_MOCKO_ANY_HEADERS',
+    NO_DATA = 'LOCO_MOCKO_NO_DATA',
+    ANY_DATA = 'LOCO_MOCKO_ANY_DATA',
 
   // util methods
     isNullOrUndefined = function (object) {
@@ -42,11 +43,24 @@
         response = mockedMethod.getResponse(requestHeaders, requestData);
 
         if (isNullOrUndefined(response)) {
+          response = mockedMethod.getResponse(ANY_HEADERS, requestData);
+        }
+
+        if (isNullOrUndefined(response)) {
           response = mockedMethod.getResponse(requestHeaders, ANY_DATA);
         }
 
         if (isNullOrUndefined(response)) {
-          throw new Error('Please mock endpoint: ' + options.url + ' with method: ' + options.type + ' with headers: ' + options.headers + ' and data: ' + options.data);
+          response = mockedMethod.getResponse(ANY_HEADERS, ANY_DATA);
+        }
+
+        if (isNullOrUndefined(response)) {
+          throw new Error(
+            'Please mock endpoint: ' + options.url +
+              ' with method: ' + options.type +
+              ' with headers: ' + JSON.stringify(options.headers) +
+              ' and data: ' + JSON.stringify(options.data)
+          );
         }
 
         responseData = response.getData();
@@ -87,6 +101,11 @@
 
     withoutHeaders: function () {
       this._resetCurrentHeaders();
+      return this;
+    },
+
+    withAnyHeaders: function () {
+      this._currentHeaders = ANY_HEADERS;
       return this;
     },
 
@@ -177,5 +196,4 @@
 
 
   window.locomocko = LocoMocko;
-})
-  (window);
+})(window);
