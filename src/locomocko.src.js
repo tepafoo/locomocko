@@ -31,27 +31,24 @@
     },
     libraryMocks = {
       jQueryAjax: function (options) {
-        var mockedMethod, requestData, requestHeaders, response, responseData;
+        var mockedMethod,
+          response, responseData,
+          i, j, headers, data;
 
         if (!mockedEndpoints.hasOwnProperty(options.url)) {
           throw new Error('Please mock endpoint: ' + options.url);
         }
 
-        requestData = options.hasOwnProperty('data') && !isNullOrUndefined(options.data) ? options.data : NO_DATA;
-        requestHeaders = isObject(options.headers) ? options.headers : NO_HEADERS;
         mockedMethod = mockedEndpoints[options.url].getMethod(options.type);
-        response = mockedMethod.getResponse(requestHeaders, requestData);
 
-        if (isNullOrUndefined(response)) {
-          response = mockedMethod.getResponse(ANY_HEADERS, requestData);
-        }
+        response = null;
+        headers = [isObject(options.headers) ? options.headers : NO_HEADERS, ANY_HEADERS];
+        data = [isObject(options.data) ? options.data : NO_DATA, ANY_DATA];
 
-        if (isNullOrUndefined(response)) {
-          response = mockedMethod.getResponse(requestHeaders, ANY_DATA);
-        }
-
-        if (isNullOrUndefined(response)) {
-          response = mockedMethod.getResponse(ANY_HEADERS, ANY_DATA);
+        for (i = 0; i < headers.length && isNullOrUndefined(response); i++) {
+          for (j = 0; j < data.length && isNullOrUndefined(response); j++) {
+            response = mockedMethod.getResponse(headers[i], data[j]);
+          }
         }
 
         if (isNullOrUndefined(response)) {
