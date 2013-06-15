@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Karma run tests" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/node" path-to-js-file="node_modules/karma/bin/karma" application-parameters="run" working-dir="$PROJECT_DIR$">
+    <envs>
+      <env name="CHROME_BIN" value="/usr/bin/chromium-browser" />
+      <env name="OPERA_BIN" value="/usr/bin/opera" />
+      <env name="FIREFOX_BIN" value="/usr/bin/firefox" />
+    </envs>
+    <RunnerSettings RunnerId="NodeJS.debug" />
+    <RunnerSettings RunnerId="NodeJS.run" />
+    <ConfigurationWrapper RunnerId="NodeJS.debug" />
+    <ConfigurationWrapper RunnerId="NodeJS.run" />
+    <method />
+  </configuration>
+</component>
