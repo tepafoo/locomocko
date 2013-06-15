@@ -10,3 +10,4 @@
 - $.ajax() currently only implemented with "options" object
 - anyMethod()
 - modify request/response headers?
+- null argument passed to methods such as thenRespond() ?
