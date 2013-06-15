@@ -33,10 +33,18 @@
       jQueryAjax: function (options) {
         var mockedMethod,
           response, responseData,
-          i, j, headers, data;
+          i, j, headers, data,
+          getError = function () {
+            return new Error(
+              'Please mock endpoint: ' + options.url +
+                ' with method: ' + options.type +
+                ' with headers: ' + JSON.stringify(options.headers) +
+                ' and data: ' + JSON.stringify(options.data)
+            );
+          };
 
-        if (!mockedEndpoints.hasOwnProperty(options.url)) {
-          throw new Error('Please mock endpoint: ' + options.url);
+        if (!(mockedEndpoints.hasOwnProperty(options.url) && mockedEndpoints[options.url].hasMethod(options.type))) {
+          throw getError();
         }
 
         mockedMethod = mockedEndpoints[options.url].getMethod(options.type);
@@ -52,12 +60,7 @@
         }
 
         if (isNullOrUndefined(response)) {
-          throw new Error(
-            'Please mock endpoint: ' + options.url +
-              ' with method: ' + options.type +
-              ' with headers: ' + JSON.stringify(options.headers) +
-              ' and data: ' + JSON.stringify(options.data)
-          );
+          throw getError();
         }
 
         responseData = response.getData();
@@ -157,6 +160,11 @@
     getMethod: function (method) {
       var normalized = MockedEndpoint._normalize(method);
       return this._methods[normalized];
+    },
+
+    hasMethod: function (method) {
+      var normalized = MockedEndpoint._normalize(method);
+      return this._methods.hasOwnProperty(normalized);
     }
   };
 
