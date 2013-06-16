@@ -74,11 +74,15 @@
       }
     };
 
-  function MockedResponse(data) {
-    this._data = data;
+  function MockedResponse() {
+    this._data = NO_DATA;
   }
 
   MockedResponse.prototype = {
+
+    withData: function (data) {
+      this._data = data;
+    },
 
     getData: function () {
       return this._data;
@@ -122,13 +126,17 @@
       return this;
     },
 
-    thenRespond: function (responseData) {
+    thenRespond: function () {
       var normalized = MockedMethod._normalize(this._currentHeaders, this._currentData);
 
-      this._responses[normalized] = new MockedResponse(responseData);
+      if (!this._responses.hasOwnProperty(normalized)) {
+        this._responses[normalized] = new MockedResponse();
+      }
 
       this._resetCurrentHeaders();
       this._resetCurrentData();
+
+      return this._responses[normalized];
     },
 
     getResponse: function (requestHeaders, requestData) {

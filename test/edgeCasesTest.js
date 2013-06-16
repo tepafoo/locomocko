@@ -57,7 +57,7 @@ describe('locomocko', function () {
       expectedHeaders = 'someHeaders',
       expectedData = 'someData';
 
-    locomocko.whenUrl(expectedUrl).withMethod('PUT').withAnyHeaders().withAnyData().thenRespond('Some Response');
+    locomocko.whenUrl(expectedUrl).withMethod('PUT').withAnyHeaders().withAnyData().thenRespond().withData('Some Response');
 
     //when
     try {

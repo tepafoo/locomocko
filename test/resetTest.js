@@ -20,7 +20,7 @@ describe('locomocko', function () {
 
     locomocko.shouldMock('jQuery');
 
-    locomocko.whenUrl(url).withMethod(method).withAnyData().thenRespond({});
+    locomocko.whenUrl(url).withMethod(method).withAnyData().thenRespond().withData({});
 
     $.ajax({
       url: url,
@@ -53,7 +53,7 @@ describe('locomocko', function () {
 
     locomocko.shouldMock('jQuery');
 
-    locomocko.whenUrl(url).withMethod(method).withData(requestData).thenRespond({});
+    locomocko.whenUrl(url).withMethod(method).withData(requestData).thenRespond().withData({});
 
     locomocko.reset();
 

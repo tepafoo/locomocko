@@ -16,7 +16,7 @@ var NO_REQUEST_HEADERS = {},
         "someResponseDataKey": "someResponseDataValue"
       };
 
-    locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond(expectedResponseData);
+    locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData);
 
     // when and then
     assertJQueryAjaxCalled(expectedUrl, method, null, expectedResponseData, done);
@@ -62,7 +62,7 @@ var NO_REQUEST_HEADERS = {},
         "someResponseDataKey": "someResponseDataValue"
       };
 
-    locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withAnyData().thenRespond(expectedResponseData);
+    locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withAnyData().thenRespond().withData(expectedResponseData);
 
     // when and then
     assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
@@ -78,7 +78,7 @@ var NO_REQUEST_HEADERS = {},
         "someResponseDataKey": "someResponseDataValue"
       };
 
-    locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().withHeaders(requestHeaders).thenRespond(expectedResponseData);
+    locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().withHeaders(requestHeaders).thenRespond().withData(expectedResponseData);
 
     // when and then
     assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
@@ -121,7 +121,7 @@ var NO_REQUEST_HEADERS = {},
         "someResponseDataKey": "someResponseDataValue"
       };
 
-    locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withAnyData().thenRespond(expectedResponseData);
+    locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withAnyData().thenRespond().withData(expectedResponseData);
 
     // when and then
     assertJQueryAjaxCalled(expectedUrl, method, NO_REQUEST_DATA, expectedResponseData, done);
@@ -133,7 +133,7 @@ var NO_REQUEST_HEADERS = {},
         "someResponseDataKey": "someResponseDataValue"
       };
 
-    locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().withoutHeaders().thenRespond(expectedResponseData);
+    locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().withoutHeaders().thenRespond().withData(expectedResponseData);
 
     // when and then
     assertJQueryAjaxCalled(expectedUrl, method, NO_REQUEST_DATA, expectedResponseData, done);
@@ -202,7 +202,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withData(requestData).thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withData(requestData).thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, requestData, expectedResponseData, done);
@@ -224,7 +224,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withoutData().thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withoutData().thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
@@ -260,7 +260,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(requestData).thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(requestData).thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalled(expectedUrl, method, requestData, expectedResponseData, done);
@@ -276,7 +276,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withoutData().thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withoutData().thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalled(expectedUrl, method, NO_REQUEST_DATA, expectedResponseData, done);
@@ -297,7 +297,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withAnyData().thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withAnyData().thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
@@ -319,7 +319,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(requestData).thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(requestData).thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, requestData, expectedResponseData, done);
@@ -340,7 +340,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withoutData().thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withoutData().thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
@@ -380,7 +380,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withData(requestData).withHeaders(requestHeaders).thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withData(requestData).withHeaders(requestHeaders).thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, requestData, expectedResponseData, done);
@@ -402,7 +402,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().withHeaders(requestHeaders).thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().withHeaders(requestHeaders).thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
@@ -438,7 +438,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withData(requestData).withoutHeaders().thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withData(requestData).withoutHeaders().thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalled(expectedUrl, method, requestData, expectedResponseData, done);
@@ -454,7 +454,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().withoutHeaders().thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().withoutHeaders().thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalled(expectedUrl, method, NO_REQUEST_DATA, expectedResponseData, done);
@@ -475,7 +475,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().withAnyHeaders().thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().withAnyHeaders().thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
@@ -497,7 +497,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withData(requestData).withAnyHeaders().thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withData(requestData).withAnyHeaders().thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, requestData, expectedResponseData, done);
@@ -518,7 +518,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().withAnyHeaders().thenRespond(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().withAnyHeaders().thenRespond().withData(expectedResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
@@ -535,8 +535,8 @@ describe('locomocko', function () {
             "lastResponseDataKey": "lastResponseDataValue"
           };
 
-        locomocko.whenUrl(expectedUrl).withMethod('GET').withoutData().thenRespond({"notExpectedResponseKey": "notExpectedResponseValue"});
-        locomocko.whenUrl(expectedUrl).withMethod('GET').withoutData().thenRespond(expectedResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod('GET').withoutData().thenRespond().withData({"notExpectedResponseKey": "notExpectedResponseValue"});
+        locomocko.whenUrl(expectedUrl).withMethod('GET').withoutData().thenRespond().withData(expectedResponseData);
 
         // when and then
         assertJQueryAjaxCalled(expectedUrl, 'GET', NO_REQUEST_DATA, expectedResponseData, done);
@@ -550,8 +550,8 @@ describe('locomocko', function () {
             "lastResponseDataKey": "lastResponseDataValue"
           };
 
-        locomocko.whenUrl(expectedUrl).withMethod('GET').withData(requestData).thenRespond({"notExpectedResponseKey": "notExpectedResponseValue"});
-        locomocko.whenUrl(expectedUrl).withMethod('GET').withData(requestData).thenRespond(expectedResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod('GET').withData(requestData).thenRespond().withData({"notExpectedResponseKey": "notExpectedResponseValue"});
+        locomocko.whenUrl(expectedUrl).withMethod('GET').withData(requestData).thenRespond().withData(expectedResponseData);
 
         // when and then
         assertJQueryAjaxCalled(expectedUrl, 'GET', requestData, expectedResponseData, done);
@@ -573,8 +573,8 @@ describe('locomocko', function () {
             "secondResponseDataKey": "secondResponseDataValue"
           };
 
-        locomocko.whenUrl(expectedUrl).withMethod(method).withData(firstRequestData).thenRespond(expectedFirstResponseData);
-        locomocko.whenUrl(expectedUrl).withMethod(method).withData(secondRequestData).thenRespond(expectedSecondResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod(method).withData(firstRequestData).thenRespond().withData(expectedFirstResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod(method).withData(secondRequestData).thenRespond().withData(expectedSecondResponseData);
 
         // when and then
         assertJQueryAjaxCalled(expectedUrl, method, firstRequestData, expectedFirstResponseData);
@@ -599,10 +599,10 @@ describe('locomocko', function () {
             "someDeleteResponseDataKey": "someDeleteResponseDataValue"
           };
 
-        locomocko.whenUrl(expectedUrl).withMethod('GET').withAnyData().thenRespond(expectedGetResponseData);
-        locomocko.whenUrl(expectedUrl).withMethod('POST').withAnyData().thenRespond(expectedPostResponseData);
-        locomocko.whenUrl(expectedUrl).withMethod('PUT').withAnyData().thenRespond(expectedPutResponseData);
-        locomocko.whenUrl(expectedUrl).withMethod('DELETE').withAnyData().thenRespond(expectedDeleteResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod('GET').withAnyData().thenRespond().withData(expectedGetResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod('POST').withAnyData().thenRespond().withData(expectedPostResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod('PUT').withAnyData().thenRespond().withData(expectedPutResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod('DELETE').withAnyData().thenRespond().withData(expectedDeleteResponseData);
 
         // when and then
         assertJQueryAjaxCalled(expectedUrl, 'GET', null, expectedGetResponseData);
@@ -635,10 +635,10 @@ describe('locomocko', function () {
             "thirdUrlPutResponseDataKey": "thirdUrlPutResponseDataValue"
           };
 
-        locomocko.whenUrl(expectedFirstUrl).withMethod('GET').withAnyData().thenRespond(expectedFirstUrlGetResponseData);
-        locomocko.whenUrl(expectedFirstUrl).withMethod('DELETE').withAnyData().thenRespond(expectedFirstUrlDeleteResponseData);
-        locomocko.whenUrl(expectedSecondUrl).withMethod('POST').withAnyData().thenRespond(expectedSecondUrlPostResponseData);
-        locomocko.whenUrl(expectedThirdUrl).withMethod('PUT').withAnyData().thenRespond(expectedThirdUrlPutResponseData);
+        locomocko.whenUrl(expectedFirstUrl).withMethod('GET').withAnyData().thenRespond().withData(expectedFirstUrlGetResponseData);
+        locomocko.whenUrl(expectedFirstUrl).withMethod('DELETE').withAnyData().thenRespond().withData(expectedFirstUrlDeleteResponseData);
+        locomocko.whenUrl(expectedSecondUrl).withMethod('POST').withAnyData().thenRespond().withData(expectedSecondUrlPostResponseData);
+        locomocko.whenUrl(expectedThirdUrl).withMethod('PUT').withAnyData().thenRespond().withData(expectedThirdUrlPutResponseData);
 
         // when and then
         assertJQueryAjaxCalled(expectedFirstUrl, 'GET', null, expectedFirstUrlGetResponseData);
@@ -676,10 +676,10 @@ describe('locomocko', function () {
             "someFourthResponseDataKey": "someFourthResponseDataValue"
           };
 
-        locomocko.whenUrl(expectedUrl).withMethod(method).withData(firstRequestData).thenRespond(expectedFirstResponseData);
-        locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond(expectedSecondResponseData);
-        locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().thenRespond(expectedThirdResponseData);
-        locomocko.whenUrl(expectedUrl).withMethod(method).withData(fourthRequestData).thenRespond(expectedFourthResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod(method).withData(firstRequestData).thenRespond().withData(expectedFirstResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedSecondResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().thenRespond().withData(expectedThirdResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod(method).withData(fourthRequestData).thenRespond().withData(expectedFourthResponseData);
 
         // when and then
         assertJQueryAjaxCalled(expectedUrl, method, firstRequestData, expectedFirstResponseData);
@@ -714,8 +714,8 @@ describe('locomocko', function () {
               "secondResponseDataKey": "secondResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(firstRequestHeaders).withData(requestData).thenRespond(expectedFirstResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(secondRequestHeaders).withData(requestData).thenRespond(expectedSecondResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(firstRequestHeaders).withData(requestData).thenRespond().withData(expectedFirstResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(secondRequestHeaders).withData(requestData).thenRespond().withData(expectedSecondResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, firstRequestHeaders, requestData, expectedFirstResponseData);
@@ -740,8 +740,8 @@ describe('locomocko', function () {
               "secondResponseDataKey": "secondResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(firstRequestHeaders).withAnyData().thenRespond(expectedFirstResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(secondRequestHeaders).withAnyData().thenRespond(expectedSecondResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(firstRequestHeaders).withAnyData().thenRespond().withData(expectedFirstResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(secondRequestHeaders).withAnyData().thenRespond().withData(expectedSecondResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, firstRequestHeaders, ["anyData1"], expectedFirstResponseData);
@@ -769,9 +769,9 @@ describe('locomocko', function () {
               "thirdResponseDataKey": "thirdResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(firstRequestHeaders).withoutData().thenRespond(expectedFirstResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(secondRequestHeaders).withoutData().thenRespond(expectedSecondResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withoutData().thenRespond(expectedThirdResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(firstRequestHeaders).withoutData().thenRespond().withData(expectedFirstResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(secondRequestHeaders).withoutData().thenRespond().withData(expectedSecondResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withoutData().thenRespond().withData(expectedThirdResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, firstRequestHeaders, NO_REQUEST_DATA, expectedFirstResponseData);
@@ -804,8 +804,8 @@ describe('locomocko', function () {
               "secondResponseDataKey": "secondResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withData(firstRequestData).thenRespond(expectedFirstResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withData(secondRequestData).thenRespond(expectedSecondResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withData(firstRequestData).thenRespond().withData(expectedFirstResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withData(secondRequestData).thenRespond().withData(expectedSecondResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, firstRequestData, expectedFirstResponseData);
@@ -830,8 +830,8 @@ describe('locomocko', function () {
               "secondResponseDataKey": "secondResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(firstRequestData).thenRespond(expectedFirstResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(secondRequestData).thenRespond(expectedSecondResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(firstRequestData).thenRespond().withData(expectedFirstResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(secondRequestData).thenRespond().withData(expectedSecondResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, {"blah": "bloh"}, firstRequestData, expectedFirstResponseData);
@@ -856,8 +856,8 @@ describe('locomocko', function () {
               "secondResponseDataKey": "secondResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(firstRequestData).thenRespond(expectedFirstResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(secondRequestData).thenRespond(expectedSecondResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(firstRequestData).thenRespond().withData(expectedFirstResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(secondRequestData).thenRespond().withData(expectedSecondResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, firstRequestData, expectedFirstResponseData);
@@ -887,9 +887,9 @@ describe('locomocko', function () {
               "thirdResponseDataKey": "thirdResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(requestData).thenRespond(expectedFirstResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(requestData).thenRespond(expectedSecondResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(thirdRequestHeaders).withData(requestData).thenRespond(expectedThirdResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(requestData).thenRespond().withData(expectedFirstResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(requestData).thenRespond().withData(expectedSecondResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(thirdRequestHeaders).withData(requestData).thenRespond().withData(expectedThirdResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, requestData, expectedFirstResponseData);
@@ -917,9 +917,9 @@ describe('locomocko', function () {
               "thirdResponseDataKey": "thirdResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withAnyData().thenRespond(expectedFirstResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withAnyData().thenRespond(expectedSecondResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(thirdRequestHeaders).withAnyData().thenRespond(expectedThirdResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withAnyData().thenRespond().withData(expectedFirstResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withAnyData().thenRespond().withData(expectedSecondResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(thirdRequestHeaders).withAnyData().thenRespond().withData(expectedThirdResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, {"anyData1": "anyData1"}, expectedFirstResponseData);
@@ -947,9 +947,9 @@ describe('locomocko', function () {
               "thirdResponseDataKey": "thirdResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withoutData().thenRespond(expectedFirstResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withoutData().thenRespond(expectedSecondResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(thirdRequestHeaders).withoutData().thenRespond(expectedThirdResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withoutData().thenRespond().withData(expectedFirstResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withoutData().thenRespond().withData(expectedSecondResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(thirdRequestHeaders).withoutData().thenRespond().withData(expectedThirdResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, NO_REQUEST_DATA, expectedFirstResponseData);
@@ -982,9 +982,9 @@ describe('locomocko', function () {
               "thirdResponseDataKey": "thirdResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withoutData().thenRespond(expectedFirstResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withAnyData().thenRespond(expectedSecondResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withData(requestData).thenRespond(expectedThirdResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withoutData().thenRespond().withData(expectedFirstResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withAnyData().thenRespond().withData(expectedSecondResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withData(requestData).thenRespond().withData(expectedThirdResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedFirstResponseData);
@@ -1012,9 +1012,9 @@ describe('locomocko', function () {
               "thirdResponseDataKey": "thirdResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withoutData().thenRespond(expectedFirstResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withAnyData().thenRespond(expectedSecondResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(requestData).thenRespond(expectedThirdResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withoutData().thenRespond().withData(expectedFirstResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withAnyData().thenRespond().withData(expectedSecondResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(requestData).thenRespond().withData(expectedThirdResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, {"anyHeader1": "anyHeader1"}, NO_REQUEST_DATA, expectedFirstResponseData);
@@ -1042,9 +1042,9 @@ describe('locomocko', function () {
               "thirdResponseDataKey": "thirdResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withoutData().thenRespond(expectedFirstResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withAnyData().thenRespond(expectedSecondResponseData);
-          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(requestData).thenRespond(expectedThirdResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withoutData().thenRespond().withData(expectedFirstResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withAnyData().thenRespond().withData(expectedSecondResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(requestData).thenRespond().withData(expectedThirdResponseData);
 
           // when and then
           assertJQueryAjaxCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, NO_REQUEST_DATA, expectedFirstResponseData);
