@@ -30,6 +30,10 @@
       return Object.prototype.toString.call(object) === '[object String]';
     },
 
+    hasArguments = function (input) {
+      return input.length !== ZERO_LENGTH
+    },
+
     getIllegalArgumentError = function () {
       return new Error('IllegalArgumentError');
     },
@@ -137,7 +141,7 @@
     },
 
     thenRespond: function () {
-      if (arguments.length !== ZERO_LENGTH) {
+      if (hasArguments(arguments)) {
         throw getIllegalArgumentError();
       }
 
@@ -215,6 +219,10 @@
   };
 
   LocoMocko.reset = function () {
+    if (hasArguments(arguments)) {
+      throw getIllegalArgumentError();
+    }
+
     $.ajax = libraryOriginals.jQueryAjax;
     mockedEndpoints = {};
   };
