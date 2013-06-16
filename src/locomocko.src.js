@@ -15,6 +15,8 @@
     NO_DATA = 'LOCO_MOCKO_NO_DATA',
     ANY_DATA = 'LOCO_MOCKO_ANY_DATA',
 
+    ZERO_LENGTH = 0,
+
   // util methods
     isNullOrUndefined = function (object) {
       return typeof object === 'undefined' || object === null;
@@ -127,6 +129,11 @@
     },
 
     thenRespond: function () {
+      if (arguments.length !== ZERO_LENGTH) {
+        throw new Error('IllegalArgumentError');
+      }
+
+
       var normalized = MockedMethod._normalize(this._currentHeaders, this._currentData);
 
       if (!this._responses.hasOwnProperty(normalized)) {
