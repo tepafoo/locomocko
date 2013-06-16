@@ -16,6 +16,8 @@
     ANY_DATA = 'LOCO_MOCKO_ANY_DATA',
 
     ZERO_LENGTH = 0,
+    NOT_IN_ARRAY = -1,
+    EXPECTED_METHODS_ARRAY = ['GET', 'POST', 'PUT', 'DELETE'],
 
   // util methods
     isNullOrUndefined = function (object) {
@@ -202,7 +204,19 @@
   };
 
   MockedEndpoint._normalize = function (method) {
-    return method.toUpperCase();
+    var normalized;
+
+    if (!isString(method)) {
+      throw getIllegalArgumentError();
+    }
+
+    normalized = method.toUpperCase();
+
+    if (EXPECTED_METHODS_ARRAY.indexOf(normalized) === NOT_IN_ARRAY) {
+      throw getIllegalArgumentError();
+    }
+
+    return normalized;
   };
 
 
