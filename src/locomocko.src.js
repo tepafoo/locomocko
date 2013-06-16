@@ -118,11 +118,19 @@
     },
 
     withoutHeaders: function () {
+      if (hasArguments(arguments)) {
+        throw getIllegalArgumentError();
+      }
+
       this._resetCurrentHeaders();
       return this;
     },
 
     withAnyHeaders: function () {
+      if (hasArguments(arguments)) {
+        throw getIllegalArgumentError();
+      }
+
       this._currentHeaders = ANY_HEADERS;
       return this;
     },
@@ -133,11 +141,19 @@
     },
 
     withoutData: function () {
+      if (hasArguments(arguments)) {
+        throw getIllegalArgumentError();
+      }
+
       this._resetCurrentData();
       return this;
     },
 
     withAnyData: function () {
+      if (hasArguments(arguments)) {
+        throw getIllegalArgumentError();
+      }
+
       this._currentData = ANY_DATA;
       return this;
     },
@@ -146,7 +162,6 @@
       if (hasArguments(arguments)) {
         throw getIllegalArgumentError();
       }
-
 
       var normalized = MockedMethod._normalize(this._currentHeaders, this._currentData);
 

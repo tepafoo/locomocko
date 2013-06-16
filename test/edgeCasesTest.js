@@ -297,4 +297,72 @@ describe('locomocko', function () {
       }
     });
   });
+
+  it('throws an error when withAnyData() is passed an argument', function () {
+    var toTry = [null, 'string', 4, true, {}, [], new Date(), new RegExp()];
+
+    _.each(toTry, function (type) {
+
+      try {
+        locomocko.whenUrl('someUrl').withMethod('GET').withAnyData(type);
+
+        //fail if execution comes to this point
+        false.should.be.true;
+
+      } catch (e) {
+        e.message.should.equal('IllegalArgumentError');
+      }
+    });
+  });
+
+  it('throws an error when withoutData() is passed an argument', function () {
+    var toTry = [null, 'string', 4, true, {}, [], new Date(), new RegExp()];
+
+    _.each(toTry, function (type) {
+
+      try {
+        locomocko.whenUrl('someUrl').withMethod('GET').withoutData(type);
+
+        //fail if execution comes to this point
+        false.should.be.true;
+
+      } catch (e) {
+        e.message.should.equal('IllegalArgumentError');
+      }
+    });
+  });
+
+  it('throws an error when withAnyHeaders() is passed an argument', function () {
+    var toTry = [null, 'string', 4, true, {}, [], new Date(), new RegExp()];
+
+    _.each(toTry, function (type) {
+
+      try {
+        locomocko.whenUrl('someUrl').withMethod('GET').withAnyHeaders(type);
+
+        //fail if execution comes to this point
+        false.should.be.true;
+
+      } catch (e) {
+        e.message.should.equal('IllegalArgumentError');
+      }
+    });
+  });
+
+  it('throws an error when withoutHeaders() is passed an argument', function () {
+    var toTry = [null, 'string', 4, true, {}, [], new Date(), new RegExp()];
+
+    _.each(toTry, function (type) {
+
+      try {
+        locomocko.whenUrl('someUrl').withMethod('GET').withoutHeaders(type);
+
+        //fail if execution comes to this point
+        false.should.be.true;
+
+      } catch (e) {
+        e.message.should.equal('IllegalArgumentError');
+      }
+    });
+  });
 });
