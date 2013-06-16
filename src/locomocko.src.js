@@ -212,6 +212,10 @@
   LocoMocko.version = '0.0.1';
 
   LocoMocko.shouldMock = function (library) {
+    if (!isString(library)) {
+      throw getIllegalArgumentError();
+    }
+
     if (library === 'jQuery') {
       libraryOriginals.jQueryAjax = $.ajax;
       $.ajax = libraryMocks.jQueryAjax;
