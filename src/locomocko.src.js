@@ -101,6 +101,10 @@
     },
 
     getData: function () {
+      if (hasArguments(arguments)) {
+        throw getIllegalArgumentError();
+      }
+
       return this._data;
     }
   };

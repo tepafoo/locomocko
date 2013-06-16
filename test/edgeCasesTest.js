@@ -365,4 +365,21 @@ describe('locomocko', function () {
       }
     });
   });
+
+  it('throws an error when getData() is passed an argument', function () {
+    var toTry = [null, 'string', 4, true, {}, [], new Date(), new RegExp()];
+
+    _.each(toTry, function (type) {
+
+      try {
+        locomocko.whenUrl('someUrl').withMethod('PUT').withAnyHeaders().withAnyData().thenRespond().getData(type);
+
+        //fail if execution comes to this point
+        false.should.be.true;
+
+      } catch (e) {
+        e.message.should.equal('IllegalArgumentError');
+      }
+    });
+  });
 });
