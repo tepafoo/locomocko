@@ -26,6 +26,14 @@
       return Object.prototype.toString.call(object) === '[object Object]';
     },
 
+    isString = function (object) {
+      return Object.prototype.toString.call(object) === '[object String]';
+    },
+
+    getIllegalArgumentError = function () {
+      return new Error('IllegalArgumentError');
+    },
+
   // other
     mockedEndpoints = {},
     libraryOriginals = {
@@ -130,7 +138,7 @@
 
     thenRespond: function () {
       if (arguments.length !== ZERO_LENGTH) {
-        throw new Error('IllegalArgumentError');
+        throw getIllegalArgumentError();
       }
 
 
@@ -212,6 +220,10 @@
   };
 
   LocoMocko.whenUrl = function (url) {
+
+    if (!isString(url)) {
+      throw getIllegalArgumentError();
+    }
 
     if (!mockedEndpoints.hasOwnProperty(url)) {
       mockedEndpoints[url] = new MockedEndpoint();

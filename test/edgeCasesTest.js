@@ -102,4 +102,21 @@ describe('locomocko', function () {
       }
     });
   });
+
+  it('throws an error when whenUrl() not passed a String', function () {
+    var toTry = [null, 4, true, {}, [], new Date(), new RegExp()];
+
+    _.each(toTry, function (type) {
+
+      try {
+        locomocko.whenUrl(type);
+
+        //fail if execution comes to this point
+        false.should.be.true;
+
+      } catch (e) {
+        e.message.should.equal('IllegalArgumentError');
+      }
+    });
+  });
 });
