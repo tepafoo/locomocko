@@ -85,19 +85,43 @@
           readyState: 4,
           status: 200,
           statusText: 'OK',
-          responseText: JSON.stringify(responseData)
+          responseText: JSON.stringify(responseData),
+          getAllResponseHeaders: function () {
+            var responseHeaders = response.getHeaders(),
+              headerKey, result = '';
+            for (headerKey in responseHeaders) {
+              if (responseHeaders.hasOwnProperty(headerKey)) {
+                result += headerKey + ': ' + responseHeaders[headerKey] + '\n';
+              }
+            }
+
+            return result;
+          },
+          getResponseHeader: function (headerKey) {
+            return response.getHeaders()[headerKey];
+
+          }
         });
       }
     };
 
   function MockedResponse() {
     this._data = NO_DATA;
+    this._headers = {};
   }
 
   MockedResponse.prototype = {
 
     withData: function (data) {
       this._data = data;
+
+      return this;
+    },
+
+    withHeaders: function (headers) {
+      this._headers = headers;
+
+      return this;
     },
 
     getData: function () {
@@ -106,6 +130,10 @@
       }
 
       return this._data;
+    },
+
+    getHeaders: function () {
+      return this._headers;
     }
   };
 
