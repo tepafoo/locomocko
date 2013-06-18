@@ -32,7 +32,6 @@ var NO_REQUEST_HEADERS = {},
         _.isObject(jqXHR).should.be.true;
         jqXHR.readyState.should.equal(4);
         jqXHR.status.should.equal(200);
-        jqXHR.statusText.should.equal('OK');
 
         // assert response data
         jqXHR.responseText.should.equal(JSON.stringify(expectedResponseData));
@@ -94,7 +93,6 @@ var NO_REQUEST_HEADERS = {},
           _.isObject(jqXHR).should.be.true;
           jqXHR.readyState.should.equal(4);
           jqXHR.status.should.equal(200);
-          jqXHR.statusText.should.equal('OK');
 
           // assert response data
           jqXHR.responseText.should.equal(stringified);
@@ -153,7 +151,6 @@ var NO_REQUEST_HEADERS = {},
         _.isObject(jqXHR).should.be.true;
         jqXHR.readyState.should.equal(4);
         jqXHR.status.should.equal(200);
-        jqXHR.statusText.should.equal('OK');
 
         // assert response headers
         jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
@@ -569,12 +566,13 @@ describe('locomocko', function () {
         });
       });
 
-      describe('thenRespond().withHeaders().withData()', function () {
-        it('mocks jQuery.ajax() GET thenRespond().withHeaders().withData() as expected', function (done) {
+      describe('thenRespond().withHeaders().withData().withStatusCode()', function () {
+        it('mocks jQuery.ajax() GET thenRespond().withHeaders().withData().withStatusCode() as expected', function (done) {
 
           // given
           var method = 'GET',
             expectedUrl = 'someUrl',
+            expectedStatusCode = 301,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
               "someResponseHeaderKey2": "someResponseHeaderValue2"
@@ -583,7 +581,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withHeaders(expectedResponseHeaders).withData(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withHeaders(expectedResponseHeaders).withData(expectedResponseData).withStatusCode(expectedStatusCode);
 
           // when and then
           $.ajax({
@@ -596,8 +594,7 @@ describe('locomocko', function () {
               textStatus.should.equal('success');
               _.isObject(jqXHR).should.be.true;
               jqXHR.readyState.should.equal(4);
-              jqXHR.status.should.equal(200);
-              jqXHR.statusText.should.equal('OK');
+              jqXHR.status.should.equal(expectedStatusCode);
 
               // assert response headers
               jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
@@ -614,11 +611,12 @@ describe('locomocko', function () {
 
         });
 
-        it('mocks jQuery.ajax() POST thenRespond().withHeaders().withData() as expected', function (done) {
+        it('mocks jQuery.ajax() POST thenRespond().withHeaders().withData().withStatusCode() as expected', function (done) {
 
           // given
           var method = 'POST',
             expectedUrl = 'someUrl',
+            expectedStatusCode = 500,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
               "someResponseHeaderKey2": "someResponseHeaderValue2"
@@ -627,7 +625,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withHeaders(expectedResponseHeaders).withData(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withHeaders(expectedResponseHeaders).withData(expectedResponseData).withStatusCode(expectedStatusCode);
 
           // when and then
           $.ajax({
@@ -640,8 +638,7 @@ describe('locomocko', function () {
               textStatus.should.equal('success');
               _.isObject(jqXHR).should.be.true;
               jqXHR.readyState.should.equal(4);
-              jqXHR.status.should.equal(200);
-              jqXHR.statusText.should.equal('OK');
+              jqXHR.status.should.equal(expectedStatusCode);
 
               // assert response headers
               jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
@@ -658,11 +655,12 @@ describe('locomocko', function () {
 
         });
 
-        it('mocks jQuery.ajax() PUT thenRespond().withHeaders().withData() as expected', function (done) {
+        it('mocks jQuery.ajax() PUT thenRespond().withHeaders().withData().withStatusCode() as expected', function (done) {
 
           // given
           var method = 'PUT',
             expectedUrl = 'someUrl',
+            expectedStatusCode = 404,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
               "someResponseHeaderKey2": "someResponseHeaderValue2"
@@ -671,7 +669,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withHeaders(expectedResponseHeaders).withData(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withHeaders(expectedResponseHeaders).withData(expectedResponseData).withStatusCode(expectedStatusCode);
 
           // when and then
           $.ajax({
@@ -684,8 +682,7 @@ describe('locomocko', function () {
               textStatus.should.equal('success');
               _.isObject(jqXHR).should.be.true;
               jqXHR.readyState.should.equal(4);
-              jqXHR.status.should.equal(200);
-              jqXHR.statusText.should.equal('OK');
+              jqXHR.status.should.equal(expectedStatusCode);
 
               // assert response headers
               jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
@@ -702,11 +699,12 @@ describe('locomocko', function () {
 
         });
 
-        it('mocks jQuery.ajax() DELETE thenRespond().withHeaders().withData() as expected', function (done) {
+        it('mocks jQuery.ajax() DELETE thenRespond().withHeaders().withData().withStatusCode() as expected', function (done) {
 
           // given
           var method = 'DELETE',
             expectedUrl = 'someUrl',
+            expectedStatusCode = 200,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
               "someResponseHeaderKey2": "someResponseHeaderValue2"
@@ -715,7 +713,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withHeaders(expectedResponseHeaders).withData(expectedResponseData);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withHeaders(expectedResponseHeaders).withData(expectedResponseData).withStatusCode(expectedStatusCode);
 
           // when and then
           $.ajax({
@@ -728,8 +726,7 @@ describe('locomocko', function () {
               textStatus.should.equal('success');
               _.isObject(jqXHR).should.be.true;
               jqXHR.readyState.should.equal(4);
-              jqXHR.status.should.equal(200);
-              jqXHR.statusText.should.equal('OK');
+              jqXHR.status.should.equal(expectedStatusCode);
 
               // assert response headers
               jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
@@ -748,12 +745,13 @@ describe('locomocko', function () {
 
       });
 
-      describe('thenRespond().withData().withHeaders()', function () {
-        it('mocks jQuery.ajax() GET thenRespond().withData().withHeaders() as expected', function (done) {
+      describe('thenRespond().withData().withHeaders().withStatusCode()', function () {
+        it('mocks jQuery.ajax() GET thenRespond().withData().withHeaders().withStatusCode() as expected', function (done) {
 
           // given
           var method = 'GET',
             expectedUrl = 'someUrl',
+            expectedStatusCode = 200,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
               "someResponseHeaderKey2": "someResponseHeaderValue2"
@@ -762,7 +760,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData).withHeaders(expectedResponseHeaders);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData).withHeaders(expectedResponseHeaders).withStatusCode(expectedStatusCode);
 
           // when and then
           $.ajax({
@@ -775,8 +773,7 @@ describe('locomocko', function () {
               textStatus.should.equal('success');
               _.isObject(jqXHR).should.be.true;
               jqXHR.readyState.should.equal(4);
-              jqXHR.status.should.equal(200);
-              jqXHR.statusText.should.equal('OK');
+              jqXHR.status.should.equal(expectedStatusCode);
 
               // assert response headers
               jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
@@ -793,11 +790,12 @@ describe('locomocko', function () {
 
         });
 
-        it('mocks jQuery.ajax() POST thenRespond().withData.withHeaders() as expected', function (done) {
+        it('mocks jQuery.ajax() POST thenRespond().withData().withHeaders().withStatusCode() as expected', function (done) {
 
           // given
           var method = 'POST',
             expectedUrl = 'someUrl',
+            expectedStatusCode = 404,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
               "someResponseHeaderKey2": "someResponseHeaderValue2"
@@ -806,7 +804,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData).withHeaders(expectedResponseHeaders);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData).withHeaders(expectedResponseHeaders).withStatusCode(expectedStatusCode);
 
           // when and then
           $.ajax({
@@ -819,8 +817,7 @@ describe('locomocko', function () {
               textStatus.should.equal('success');
               _.isObject(jqXHR).should.be.true;
               jqXHR.readyState.should.equal(4);
-              jqXHR.status.should.equal(200);
-              jqXHR.statusText.should.equal('OK');
+              jqXHR.status.should.equal(expectedStatusCode);
 
               // assert response headers
               jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
@@ -837,11 +834,12 @@ describe('locomocko', function () {
 
         });
 
-        it('mocks jQuery.ajax() PUT thenRespond().withData.withHeaders() as expected', function (done) {
+        it('mocks jQuery.ajax() PUT thenRespond().withData().withHeaders().withStatusCode() as expected', function (done) {
 
           // given
           var method = 'PUT',
             expectedUrl = 'someUrl',
+            expectedStatusCode = 503,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
               "someResponseHeaderKey2": "someResponseHeaderValue2"
@@ -850,7 +848,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData).withHeaders(expectedResponseHeaders);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData).withHeaders(expectedResponseHeaders).withStatusCode(expectedStatusCode);
 
           // when and then
           $.ajax({
@@ -863,8 +861,7 @@ describe('locomocko', function () {
               textStatus.should.equal('success');
               _.isObject(jqXHR).should.be.true;
               jqXHR.readyState.should.equal(4);
-              jqXHR.status.should.equal(200);
-              jqXHR.statusText.should.equal('OK');
+              jqXHR.status.should.equal(expectedStatusCode);
 
               // assert response headers
               jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
@@ -881,11 +878,12 @@ describe('locomocko', function () {
 
         });
 
-        it('mocks jQuery.ajax() DELETE thenRespond().withData.withHeaders() as expected', function (done) {
+        it('mocks jQuery.ajax() DELETE thenRespond().withData().withHeaders().withStatusCode() as expected', function (done) {
 
           // given
           var method = 'DELETE',
             expectedUrl = 'someUrl',
+            expectedStatusCode = 201,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
               "someResponseHeaderKey2": "someResponseHeaderValue2"
@@ -894,7 +892,7 @@ describe('locomocko', function () {
               "someResponseDataKey": "someResponseDataValue"
             };
 
-          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData).withHeaders(expectedResponseHeaders);
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData).withHeaders(expectedResponseHeaders).withStatusCode(expectedStatusCode);
 
           // when and then
           $.ajax({
@@ -907,8 +905,723 @@ describe('locomocko', function () {
               textStatus.should.equal('success');
               _.isObject(jqXHR).should.be.true;
               jqXHR.readyState.should.equal(4);
-              jqXHR.status.should.equal(200);
-              jqXHR.statusText.should.equal('OK');
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+      });
+
+      describe('thenRespond().withHeaders().withStatusCode().withData()', function () {
+        it('mocks jQuery.ajax() GET thenRespond().withHeaders().withStatusCode().withData() as expected', function (done) {
+
+          // given
+          var method = 'GET',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 301,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withHeaders(expectedResponseHeaders).withStatusCode(expectedStatusCode).withData(expectedResponseData);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+        it('mocks jQuery.ajax() POST thenRespond().withHeaders().withStatusCode().withData() as expected', function (done) {
+
+          // given
+          var method = 'POST',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 500,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withHeaders(expectedResponseHeaders).withStatusCode(expectedStatusCode).withData(expectedResponseData);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+        it('mocks jQuery.ajax() PUT thenRespond().withHeaders().withStatusCode().withData() as expected', function (done) {
+
+          // given
+          var method = 'PUT',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 404,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withHeaders(expectedResponseHeaders).withStatusCode(expectedStatusCode).withData(expectedResponseData);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+        it('mocks jQuery.ajax() DELETE thenRespond().withHeaders().withStatusCode().withData() as expected', function (done) {
+
+          // given
+          var method = 'DELETE',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 200,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withHeaders(expectedResponseHeaders).withStatusCode(expectedStatusCode).withData(expectedResponseData);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+      });
+
+      describe('thenRespond().withData().withStatusCode().withHeaders()', function () {
+        it('mocks jQuery.ajax() GET thenRespond().withData().withStatusCode().withHeaders() as expected', function (done) {
+
+          // given
+          var method = 'GET',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 200,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData).withStatusCode(expectedStatusCode).withHeaders(expectedResponseHeaders);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+        it('mocks jQuery.ajax() POST thenRespond().withData().withStatusCode().withHeaders() as expected', function (done) {
+
+          // given
+          var method = 'POST',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 404,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData).withStatusCode(expectedStatusCode).withHeaders(expectedResponseHeaders);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+        it('mocks jQuery.ajax() PUT thenRespond().withData().withStatusCode().withHeaders() as expected', function (done) {
+
+          // given
+          var method = 'PUT',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 503,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData).withStatusCode(expectedStatusCode).withHeaders(expectedResponseHeaders);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+        it('mocks jQuery.ajax() DELETE thenRespond().withData().withStatusCode().withHeaders() as expected', function (done) {
+
+          // given
+          var method = 'DELETE',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 201,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData).withStatusCode(expectedStatusCode).withHeaders(expectedResponseHeaders);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+      });
+
+      describe('thenRespond().withStatusCode().withHeaders().withData()', function () {
+        it('mocks jQuery.ajax() GET thenRespond().withStatusCode().withHeaders().withData() as expected', function (done) {
+
+          // given
+          var method = 'GET',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 301,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withStatusCode(expectedStatusCode).withHeaders(expectedResponseHeaders).withData(expectedResponseData);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+        it('mocks jQuery.ajax() POST thenRespond().withStatusCode().withHeaders().withData() as expected', function (done) {
+
+          // given
+          var method = 'POST',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 500,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withStatusCode(expectedStatusCode).withHeaders(expectedResponseHeaders).withData(expectedResponseData);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+        it('mocks jQuery.ajax() PUT thenRespond().withStatusCode().withHeaders().withData() as expected', function (done) {
+
+          // given
+          var method = 'PUT',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 404,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withStatusCode(expectedStatusCode).withHeaders(expectedResponseHeaders).withData(expectedResponseData);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+        it('mocks jQuery.ajax() DELETE thenRespond().withStatusCode().withHeaders().withData() as expected', function (done) {
+
+          // given
+          var method = 'DELETE',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 200,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withStatusCode(expectedStatusCode).withHeaders(expectedResponseHeaders).withData(expectedResponseData);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+      });
+
+      describe('thenRespond().withStatusCode().withData().withHeaders()', function () {
+        it('mocks jQuery.ajax() GET thenRespond().withStatusCode().withData().withHeaders() as expected', function (done) {
+
+          // given
+          var method = 'GET',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 200,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withStatusCode(expectedStatusCode).withData(expectedResponseData).withHeaders(expectedResponseHeaders);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+        it('mocks jQuery.ajax() POST thenRespond().withStatusCode().withData().withHeaders() as expected', function (done) {
+
+          // given
+          var method = 'POST',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 404,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withStatusCode(expectedStatusCode).withData(expectedResponseData).withHeaders(expectedResponseHeaders);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+        it('mocks jQuery.ajax() PUT thenRespond().withStatusCode().withData().withHeaders() as expected', function (done) {
+
+          // given
+          var method = 'PUT',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 503,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withStatusCode(expectedStatusCode).withData(expectedResponseData).withHeaders(expectedResponseHeaders);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
+
+              // assert response headers
+              jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
+              jqXHR.getResponseHeader('someResponseHeaderKey1').should.equal('someResponseHeaderValue1');
+              jqXHR.getResponseHeader('someResponseHeaderKey2').should.equal('someResponseHeaderValue2');
+              _.isUndefined(jqXHR.getResponseHeader('thisKeyDoesNotExist')).should.be.true;
+
+              // assert data
+              JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
+
+              done();
+            }
+          });
+
+        });
+
+        it('mocks jQuery.ajax() DELETE thenRespond().withStatusCode().withData().withHeaders() as expected', function (done) {
+
+          // given
+          var method = 'DELETE',
+            expectedUrl = 'someUrl',
+            expectedStatusCode = 201,
+            expectedResponseHeaders = {
+              "someResponseHeaderKey1": "someResponseHeaderValue1",
+              "someResponseHeaderKey2": "someResponseHeaderValue2"
+            },
+            expectedResponseData = {
+              "someResponseDataKey": "someResponseDataValue"
+            };
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withStatusCode(expectedStatusCode).withData(expectedResponseData).withHeaders(expectedResponseHeaders);
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+
+              // assert response is success
+              textStatus.should.equal('success');
+              _.isObject(jqXHR).should.be.true;
+              jqXHR.readyState.should.equal(4);
+              jqXHR.status.should.equal(expectedStatusCode);
 
               // assert response headers
               jqXHR.getAllResponseHeaders().should.equal('someResponseHeaderKey1: someResponseHeaderValue1\nsomeResponseHeaderKey2: someResponseHeaderValue2\n');
@@ -1496,7 +2209,6 @@ describe('locomocko', function () {
                 _.isObject(jqXHR).should.be.true;
                 jqXHR.readyState.should.equal(4);
                 jqXHR.status.should.equal(200);
-                jqXHR.statusText.should.equal('OK');
 
                 // assert response headers
                 jqXHR.getAllResponseHeaders().should.equal(expectedResponseHeadersAsString);
@@ -1586,7 +2298,6 @@ describe('locomocko', function () {
                 _.isObject(jqXHR).should.be.true;
                 jqXHR.readyState.should.equal(4);
                 jqXHR.status.should.equal(200);
-                jqXHR.statusText.should.equal('OK');
 
                 // assert response headers
                 jqXHR.getAllResponseHeaders().should.equal(expectedResponseHeadersAsString);
