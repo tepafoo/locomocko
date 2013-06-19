@@ -7,24 +7,26 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-var mockAndAssertOnSuccess = function (expectedCode, expectedText) {
-  locomocko.whenUrl('someUrl').withMethod('GET').withAnyData().withAnyHeaders().thenRespond().withStatusCode(expectedCode);
+describe('locomocko HTTP status test', function () {
 
-  $.getJSON('someUrl', function (data, textStatus, jqXHR) {
-    jqXHR.status.should.equal(expectedCode);
-    jqXHR.statusText.should.equal(expectedText);
+
+  var mockAndAssertOnSuccess = function (expectedCode, expectedText) {
+    locomocko.whenUrl('someUrl').withMethod('GET').withAnyData().withAnyHeaders().thenRespond().withStatusCode(expectedCode);
+
+    $.getJSON('someUrl', function (data, textStatus, jqXHR) {
+      jqXHR.status.should.equal(expectedCode);
+      jqXHR.statusText.should.equal(expectedText);
+    });
+  };
+
+  beforeEach(function () {
+    locomocko.shouldMock('jQuery');
   });
-};
 
-beforeEach(function () {
-  locomocko.shouldMock('jQuery');
-});
+  afterEach(function () {
+    locomocko.reset();
+  });
 
-afterEach(function () {
-  locomocko.reset();
-});
-
-describe('locomocko', function () {
   it('Returns expected HTTP status text on status code 100', function () {
     mockAndAssertOnSuccess(100, 'Continue');
   });

@@ -7,40 +7,42 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-var NO_REQUEST_DATA = 'NO_REQUEST_DATA',
-  assertJQueryGetJSONCalled = function (expectedUrl, requestData, expectedResponseData, done) {
-    var assertResponseIsSuccess = function (actualResponseData, textStatus, jqXHR) {
-      textStatus.should.equal('success');
-      _.isObject(jqXHR).should.be.true;
-      jqXHR.readyState.should.equal(4);
-      jqXHR.status.should.equal(200);
+describe('jQuery.getJSON()', function () {
 
-      jqXHR.responseText.should.equal(JSON.stringify(expectedResponseData));
+  var NO_REQUEST_DATA = 'NO_REQUEST_DATA',
+    assertJQueryGetJSONCalled = function (expectedUrl, requestData, expectedResponseData, done) {
+      var assertResponseIsSuccess = function (actualResponseData, textStatus, jqXHR) {
+        textStatus.should.equal('success');
+        _.isObject(jqXHR).should.be.true;
+        jqXHR.readyState.should.equal(4);
+        jqXHR.status.should.equal(200);
 
-      JSON.stringify(actualResponseData).should.equal(JSON.stringify(expectedResponseData));
+        jqXHR.responseText.should.equal(JSON.stringify(expectedResponseData));
 
-      if (_.isFunction(done)) {
-        done();
+        JSON.stringify(actualResponseData).should.equal(JSON.stringify(expectedResponseData));
+
+        if (_.isFunction(done)) {
+          done();
+        }
+      };
+
+      if (requestData === NO_REQUEST_DATA) {
+        $.getJSON(expectedUrl, assertResponseIsSuccess);
+      } else {
+        $.getJSON(expectedUrl, requestData, assertResponseIsSuccess);
       }
     };
 
-    if (requestData === NO_REQUEST_DATA) {
-      $.getJSON(expectedUrl, assertResponseIsSuccess);
-    } else {
-      $.getJSON(expectedUrl, requestData, assertResponseIsSuccess);
-    }
-  };
+  beforeEach(function () {
+    locomocko.shouldMock('jQuery');
+  });
 
-beforeEach(function () {
-  locomocko.shouldMock('jQuery');
-});
+  afterEach(function () {
+    locomocko.reset();
+  });
 
-afterEach(function () {
-  locomocko.reset();
-});
 
-describe('locomocko', function () {
-  describe('jQuery.getJSON() happy paths', function () {
+  describe('happy paths', function () {
     describe('single calls', function () {
       it('mocks jQuery.getJSON() as expected', function (done) {
         // given
@@ -875,4 +877,5 @@ describe('locomocko', function () {
       });
     });
   });
+
 });
