@@ -10,7 +10,8 @@
 (function (window) {
 
   // constants
-  var STATUS_CODE_TO_TEXT = {
+  var SUPPORTED_LIBRARIES = ['jQuery', 'angular'],
+    STATUS_CODE_TO_TEXT = {
       100: 'Continue',
       101: 'Switching Protocols',
       102: 'Processing',
@@ -351,6 +352,10 @@
   LocoMocko.shouldMock = function (library) {
     if (!isString(library)) {
       throw getIllegalArgumentError();
+    }
+
+    if (SUPPORTED_LIBRARIES.indexOf(library) === -1) {
+      throw new Error('Unsupported library');
     }
 
     if (library === 'jQuery') {

@@ -154,6 +154,18 @@ describe('locomocko', function () {
     });
   });
 
+  it('throws an error when shouldMock() called with unsupported library name', function () {
+    try {
+      locomocko.shouldMock('thisIsNotSupported');
+
+      //fail if execution comes to this point
+      false.should.be.true;
+
+    } catch (e) {
+      e.message.should.equal('Unsupported library');
+    }
+  });
+
   it('throws an error when withMethod() not passed a String', function () {
     var toTry = [null, 4, true, {}, [], new Date(), new RegExp()];
 
