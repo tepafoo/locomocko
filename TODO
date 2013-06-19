@@ -5,9 +5,6 @@
 - JsLint
 - onError? (note: jqXHR responseText is a String)
 - only called once, on readyState 4?
-- jqXHR?
 - shouldMock when library not present
 - $.ajax() currently only implemented with "options" object
 - anyMethod()
-- modify request/response headers?
-- Check if methods can be declared in beforeEach() and/or afterEach()
