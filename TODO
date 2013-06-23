@@ -8,7 +8,7 @@
 - shouldMock when library not present
 - $.ajax() currently only implemented with "options" object
 - anyMethod()
+- do not mock again on multiple calls to shouldMock()
 Angular
 - implement mocked $http with request/response transforms
-- restore original only if needed
 - angular: throw error if header() called with non-String type?
