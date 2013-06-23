@@ -108,44 +108,14 @@
   // other
     mockedEndpoints = {},
     libraryOriginals = {
-      jQueryAjax: null
+      jQueryAjax: null,
+      angularHttpProvider: null
     },
     libraryMocks = {
       jQueryAjax: function (options) {
-        var mockedMethod,
-          response, responseData, responseStatusCode,
-          i, j, headers, data,
-          getError = function () {
-            return new Error(
-              'Please mock endpoint: ' + options.url +
-                ' with method: ' + options.type +
-                ' with headers: ' + JSON.stringify(options.headers) +
-                ' and data: ' + JSON.stringify(options.data)
-            );
-          };
-
-        if (!(mockedEndpoints.hasOwnProperty(options.url) && mockedEndpoints[options.url].hasMethod(options.type))) {
-          throw getError();
-        }
-
-        mockedMethod = mockedEndpoints[options.url].getMethod(options.type);
-
-        response = null;
-        headers = [isObject(options.headers) ? options.headers : NO_HEADERS, ANY_HEADERS];
-        data = [isObject(options.data) ? options.data : NO_DATA, ANY_DATA];
-
-        for (i = 0; i < headers.length && isNullOrUndefined(response); i++) {
-          for (j = 0; j < data.length && isNullOrUndefined(response); j++) {
-            response = mockedMethod.getResponse(headers[i], data[j]);
-          }
-        }
-
-        if (isNullOrUndefined(response)) {
-          throw getError();
-        }
-
-        responseData = response.getData();
-        responseStatusCode = response.getStatusCode();
+        var response = libraryMocks.getResponse(options),
+          responseData = response.getData(),
+          responseStatusCode = response.getStatusCode();
 
         options.success(responseData, 'success', {
           readyState: 4,
@@ -168,6 +138,96 @@
 
           }
         });
+      },
+      angularHttpProvider: {
+        $get: function () {
+          return function (options) {
+            var response = libraryMocks.getResponse(options),
+              statusCode = response.getStatusCode(),
+              headers = response.getHeaders(),
+              isSuccess = function () {
+                return 200 <= statusCode && statusCode < 300;
+              },
+              headersFunction = function (header) {
+                if (isNullOrUndefined(header)) {
+                  return headers;
+                } else {
+                  return headers[header];
+                }
+              },
+              toCall = function (callback) {
+                callback(response.getData(), statusCode, headersFunction, options);
+                return this;
+              },
+              noOperation = function () {
+                return this;
+              };
+
+            if (isSuccess()) {
+              return {
+                success: toCall,
+                error: noOperation
+              };
+            } else {
+              return {
+                success: noOperation,
+                error: toCall
+              };
+            }
+          }
+        }
+      },
+      normalize: function (options) {
+        var option, result = {};
+
+        for (option in options) {
+          if (options.hasOwnProperty(option)) {
+            if (option === 'type') {
+              result['method'] = options[option];
+            } else {
+              result[option] = options[option];
+            }
+          }
+        }
+
+        return result;
+      },
+      getResponse: function (options) {
+        var mockedMethod,
+          response,
+          headers, data,
+          normalized = libraryMocks.normalize(options),
+          i, j,
+          getError = function () {
+            return new Error(
+              'Please mock endpoint: ' + normalized.url +
+                ' with method: ' + normalized.method +
+                ' with headers: ' + JSON.stringify(normalized.headers) +
+                ' and data: ' + JSON.stringify(normalized.data)
+            );
+          };
+
+        if (!(mockedEndpoints.hasOwnProperty(normalized.url) && mockedEndpoints[normalized.url].hasMethod(normalized.method))) {
+          throw getError();
+        }
+
+        mockedMethod = mockedEndpoints[normalized.url].getMethod(normalized.method);
+
+        response = null;
+        headers = [isObject(normalized.headers) ? normalized.headers : NO_HEADERS, ANY_HEADERS];
+        data = [isObject(normalized.data) ? normalized.data : NO_DATA, ANY_DATA];
+
+        for (i = 0; i < headers.length && isNullOrUndefined(response); i++) {
+          for (j = 0; j < data.length && isNullOrUndefined(response); j++) {
+            response = mockedMethod.getResponse(headers[i], data[j]);
+          }
+        }
+
+        if (isNullOrUndefined(response)) {
+          throw getError();
+        }
+
+        return response;
       }
     };
 
@@ -361,6 +421,24 @@
     if (library === 'jQuery') {
       libraryOriginals.jQueryAjax = $.ajax;
       $.ajax = libraryMocks.jQueryAjax;
+    } else if (library === 'angular') {
+//      angular.injector(['ng']).invoke(function ($http) {
+//        var i = $http;
+//      libraryOriginals.angularHttpProvider = $http;
+//      });
+//      angular.module('ng', [], function ($provide) {
+//        $provide.provider('$http', libraryMocks.angularHttpProvider);
+//      });
+
+      angular.module('mockModule', []).config(function ($httpProvider) {
+        libraryOriginals.angularHttpProvider = $httpProvider;
+      });
+
+      angular.injector(['ng', 'mockModule']);
+
+      angular.module('ng', [], function ($provide) {
+        $provide.provider('$http', libraryMocks.angularHttpProvider);
+      });
     }
   };
 
@@ -371,6 +449,11 @@
 
     $.ajax = libraryOriginals.jQueryAjax;
     mockedEndpoints = {};
+
+    angular.module('ng', [], function ($provide) {
+      $provide.provider('$http', libraryOriginals.angularHttpProvider);
+    });
+
   };
 
   LocoMocko.whenUrl = function (url) {
@@ -385,7 +468,6 @@
 
     return mockedEndpoints[url];
   };
-
 
   window.locomocko = LocoMocko;
 })(window);

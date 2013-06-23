@@ -8,7 +8,7 @@
  */
 
 describe('locomocko', function () {
-  it('stops mocking on reset()', function () {
+  it('stops mocking $.ajax() on reset()', function () {
     //given
     var url = 'someUrl',
       method = 'GET',
@@ -39,7 +39,7 @@ describe('locomocko', function () {
 
   });
 
-  it('removes all mocked endpoints on reset()', function () {
+  it('removes all mocked endpoints on $.ajax() on reset()', function () {
     //given
     var url = 'someUrl',
       method = 'GET',
@@ -70,6 +70,114 @@ describe('locomocko', function () {
           throw new Error(errorMessage);
         }
       });
+    } catch (e) {
+      e.message.should.not.equal(errorMessage);
+    }
+
+  });
+
+  it('stops mocking angular.$http() on reset()', function () {
+    //given
+    var url = 'someUrl',
+      method = 'GET',
+      callCount = 0;
+
+    angular.module('ng', [], function ($provide) {
+      $provide.provider('$http', {
+        $get: function () {
+          return function () {
+            return {
+              success: function (onSuccess) {
+                callCount++;
+                onSuccess();
+                return this;
+              },
+
+              error: function (onError) {
+                return this;
+              }
+            }
+          }
+        }
+      });
+    });
+
+    locomocko.shouldMock('angular');
+
+    locomocko.whenUrl(url).withMethod(method).withAnyData().thenRespond().withData({});
+
+    angular.injector(['ng']).invoke(function ($http) {
+      $http({
+        url: url,
+        method: method
+      }).
+        success(function () {
+        }).
+        error(function () {
+        });
+    });
+
+    locomocko.reset();
+
+    //when
+    angular.injector(['ng']).invoke(function ($http) {
+      $http({
+        url: url,
+        method: method
+      }).
+        success(function () {
+        }).
+        error(function () {
+        });
+    });
+
+    //then
+    callCount.should.equal(1);
+
+  });
+
+  it('removes all mocked endpoints on angular.$http() on reset()', function () {
+    //given
+    var url = 'someUrl',
+      method = 'GET',
+      requestData = {},
+      errorMessage = 'endpoint test has failed!';
+
+    angular.module('ng', [], function ($provide) {
+      $provide.provider('$http', {
+        $get: function () {
+          // fail if this function is ever called
+          false.should.be.true;
+        }
+      });
+    });
+
+    locomocko.shouldMock('angular');
+
+    locomocko.whenUrl(url).withMethod(method).withData(requestData).thenRespond().withData({});
+
+    locomocko.reset();
+
+    locomocko.shouldMock('angular');
+
+    try {
+      //when
+      angular.injector(['ng']).invoke(function ($http) {
+        $http({
+          url: url,
+          method: method,
+          data: requestData
+        }).
+          success(function () {
+            throw new Error(errorMessage);
+          }).
+          error(function () {
+            throw new Error(errorMessage);
+          });
+      });
+
+      // fail if execution comes to this point
+      false.should.be.true;
     } catch (e) {
       e.message.should.not.equal(errorMessage);
     }
