@@ -112,6 +112,10 @@
       angularHttpProvider: null
     },
     libraryMocks = {
+      currentlyMocked: {
+        jQuery: false,
+        angular: false
+      },
       jQueryAjax: function (options) {
         var response = libraryMocks.getResponse(options),
           responseData = response.getData(),
@@ -418,18 +422,12 @@
       throw new Error('Unsupported library');
     }
 
+    libraryMocks.currentlyMocked[library] = true;
+
     if (library === 'jQuery') {
       libraryOriginals.jQueryAjax = $.ajax;
       $.ajax = libraryMocks.jQueryAjax;
     } else if (library === 'angular') {
-//      angular.injector(['ng']).invoke(function ($http) {
-//        var i = $http;
-//      libraryOriginals.angularHttpProvider = $http;
-//      });
-//      angular.module('ng', [], function ($provide) {
-//        $provide.provider('$http', libraryMocks.angularHttpProvider);
-//      });
-
       angular.module('mockModule', []).config(function ($httpProvider) {
         libraryOriginals.angularHttpProvider = $httpProvider;
       });
@@ -447,13 +445,21 @@
       throw getIllegalArgumentError();
     }
 
-    $.ajax = libraryOriginals.jQueryAjax;
+    if (libraryMocks.currentlyMocked.jQuery) {
+      $.ajax = libraryOriginals.jQueryAjax;
+
+      libraryMocks.currentlyMocked.jQuery = false;
+    }
+
+    if (libraryMocks.currentlyMocked.angular) {
+      angular.module('ng', [], function ($provide) {
+        $provide.provider('$http', libraryOriginals.angularHttpProvider);
+      });
+
+      libraryMocks.currentlyMocked.angular = false;
+    }
+
     mockedEndpoints = {};
-
-    angular.module('ng', [], function ($provide) {
-      $provide.provider('$http', libraryOriginals.angularHttpProvider);
-    });
-
   };
 
   LocoMocko.whenUrl = function (url) {

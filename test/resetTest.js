@@ -8,6 +8,11 @@
  */
 
 describe('locomocko', function () {
+
+  beforeEach(function () {
+    locomocko.reset();
+  });
+
   it('stops mocking $.ajax() on reset()', function () {
     //given
     var url = 'someUrl',
@@ -73,6 +78,32 @@ describe('locomocko', function () {
     } catch (e) {
       e.message.should.not.equal(errorMessage);
     }
+
+  });
+
+  it('does not modify angular.$http() on jQuery mock reset()', function (done) {
+    var expectedAngularHttp = 'ANGULAR HTTP FUNCTION';
+    //given
+    //prepare angular
+    angular.module('ng', [], function ($provide) {
+      $provide.provider('$http', {
+        $get: function () {
+          return  expectedAngularHttp;
+        }
+      });
+    });
+
+    locomocko.shouldMock('jQuery');
+
+    //when
+    locomocko.reset();
+
+    //then
+    angular.injector(['ng']).invoke(function ($http) {
+      $http.should.equal(expectedAngularHttp);
+
+      done();
+    });
 
   });
 
@@ -181,6 +212,22 @@ describe('locomocko', function () {
     } catch (e) {
       e.message.should.not.equal(errorMessage);
     }
+
+  });
+
+  it('does not modify jQuery.ajax() on angular mock reset()', function () {
+    var expectedJqueryAjax = 'JQUERY AJAX FUNCTION';
+    //given
+    //prepare jQuery
+    $.ajax = expectedJqueryAjax;
+
+    locomocko.shouldMock('angular');
+
+    //when
+    locomocko.reset();
+
+    //then
+    $.ajax.should.equal(expectedJqueryAjax);
 
   });
 });
