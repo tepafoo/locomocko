@@ -164,9 +164,9 @@ describe('angular', function () {
     angularHttp;
 
   beforeEach(function () {
-    locomocko.shouldMock('angular');
+    locomocko.shouldMockAngular('mockModule');
 
-    angular.injector(['ng']).invoke(function ($http) {
+    angular.injector(['mockModule']).invoke(function ($http) {
       angularHttp = $http;
     });
   });

@@ -20,7 +20,7 @@ describe('locomocko HTTP status test', function () {
   };
 
   beforeEach(function () {
-    locomocko.shouldMock('jQuery');
+    locomocko.shouldMockJQuery();
   });
 
   afterEach(function () {

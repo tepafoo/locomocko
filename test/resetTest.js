@@ -23,7 +23,7 @@ describe('locomocko', function () {
       callCount++;
     };
 
-    locomocko.shouldMock('jQuery');
+    locomocko.shouldMockJQuery();
 
     locomocko.whenUrl(url).withMethod(method).withAnyData().thenRespond().withData({});
 
@@ -56,13 +56,13 @@ describe('locomocko', function () {
       false.should.be.true;
     };
 
-    locomocko.shouldMock('jQuery');
+    locomocko.shouldMockJQuery();
 
     locomocko.whenUrl(url).withMethod(method).withData(requestData).thenRespond().withData({});
 
     locomocko.reset();
 
-    locomocko.shouldMock('jQuery');
+    locomocko.shouldMockJQuery();
 
     try {
       //when
@@ -93,7 +93,7 @@ describe('locomocko', function () {
       });
     });
 
-    locomocko.shouldMock('jQuery');
+    locomocko.shouldMockJQuery();
 
     //when
     locomocko.reset();
@@ -113,7 +113,7 @@ describe('locomocko', function () {
       method = 'GET',
       callCount = 0;
 
-    angular.module('ng', [], function ($provide) {
+    angular.module('mockModule', [], function ($provide) {
       $provide.provider('$http', {
         $get: function () {
           return function () {
@@ -133,11 +133,11 @@ describe('locomocko', function () {
       });
     });
 
-    locomocko.shouldMock('angular');
+    locomocko.shouldMockAngular('mockModule');
 
     locomocko.whenUrl(url).withMethod(method).withAnyData().thenRespond().withData({});
 
-    angular.injector(['ng']).invoke(function ($http) {
+    angular.injector(['mockModule']).invoke(function ($http) {
       $http({
         url: url,
         method: method
@@ -151,7 +151,7 @@ describe('locomocko', function () {
     locomocko.reset();
 
     //when
-    angular.injector(['ng']).invoke(function ($http) {
+    angular.injector(['mockModule']).invoke(function ($http) {
       $http({
         url: url,
         method: method
@@ -183,13 +183,13 @@ describe('locomocko', function () {
       });
     });
 
-    locomocko.shouldMock('angular');
+    locomocko.shouldMockAngular('mockModule');
 
     locomocko.whenUrl(url).withMethod(method).withData(requestData).thenRespond().withData({});
 
     locomocko.reset();
 
-    locomocko.shouldMock('angular');
+    locomocko.shouldMockAngular('mockModule');
 
     try {
       //when
@@ -221,7 +221,7 @@ describe('locomocko', function () {
     //prepare jQuery
     $.ajax = expectedJqueryAjax;
 
-    locomocko.shouldMock('angular');
+    locomocko.shouldMockAngular('mockModule');
 
     //when
     locomocko.reset();

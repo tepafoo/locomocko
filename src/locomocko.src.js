@@ -11,6 +11,7 @@
 
   // constants
   var SUPPORTED_LIBRARIES = ['jQuery', 'angular'],
+    NO_ANGULAR_MODULE = '',
     STATUS_CODE_TO_TEXT = {
       100: 'Continue',
       101: 'Switching Protocols',
@@ -116,6 +117,7 @@
         jQuery: false,
         angular: false
       },
+      angularModule: NO_ANGULAR_MODULE,
       jQueryAjax: function (options) {
         var response = libraryMocks.getResponse(options),
           responseData = response.getData(),
@@ -413,31 +415,27 @@
 
   LocoMocko.version = '0.0.1';
 
-  LocoMocko.shouldMock = function (library) {
-    if (!isString(library)) {
+  LocoMocko.shouldMockJQuery = function () {
+    libraryMocks.currentlyMocked.jQuery = true;
+
+    libraryOriginals.jQueryAjax = $.ajax;
+    $.ajax = libraryMocks.jQueryAjax;
+  };
+
+  LocoMocko.shouldMockAngular = function (module) {
+
+    if (!isString(module)) {
       throw getIllegalArgumentError();
     }
 
-    if (SUPPORTED_LIBRARIES.indexOf(library) === -1) {
-      throw new Error('Unsupported library');
-    }
-
-    libraryMocks.currentlyMocked[library] = true;
-
-    if (library === 'jQuery') {
-      libraryOriginals.jQueryAjax = $.ajax;
-      $.ajax = libraryMocks.jQueryAjax;
-    } else if (library === 'angular') {
-      angular.module('mockModule', []).config(function ($httpProvider) {
+    angular.module(module)
+      .config(function ($httpProvider, $provide) {
         libraryOriginals.angularHttpProvider = $httpProvider;
-      });
-
-      angular.injector(['ng', 'mockModule']);
-
-      angular.module('ng', [], function ($provide) {
         $provide.provider('$http', libraryMocks.angularHttpProvider);
+
+        libraryMocks.angularModule = module;
+        libraryMocks.currentlyMocked.angular = true;
       });
-    }
   };
 
   LocoMocko.reset = function () {
@@ -452,11 +450,12 @@
     }
 
     if (libraryMocks.currentlyMocked.angular) {
-      angular.module('ng', [], function ($provide) {
+      angular.module(libraryMocks.angularModule).config(function ($provide) {
         $provide.provider('$http', libraryOriginals.angularHttpProvider);
-      });
 
-      libraryMocks.currentlyMocked.angular = false;
+        libraryMocks.angularModule = NO_ANGULAR_MODULE;
+        libraryMocks.currentlyMocked.angular = false;
+      });
     }
 
     mockedEndpoints = {};

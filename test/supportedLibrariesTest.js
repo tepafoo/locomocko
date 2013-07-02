@@ -13,11 +13,15 @@ describe('locomocko', function () {
     locomocko.reset();
   });
 
-  it('should not throw an error on shouldMock() with jQuery', function () {
-    locomocko.shouldMock('jQuery');
+  afterEach(function () {
+    locomocko.reset();
   });
 
-  it('should not throw an error on shouldMock() with angular', function () {
-    locomocko.shouldMock('angular');
+  it('should not throw an error on shouldMockJQuery() with jQuery', function () {
+    locomocko.shouldMockJQuery();
+  });
+
+  it('should not throw an error on shouldMockAngular() with angular', function () {
+    locomocko.shouldMockAngular('mockModule');
   });
 });

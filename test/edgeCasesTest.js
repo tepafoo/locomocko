@@ -8,7 +8,7 @@
  */
 
 beforeEach(function () {
-  locomocko.shouldMock('jQuery');
+  locomocko.shouldMockJQuery();
 });
 
 afterEach(function () {
@@ -137,13 +137,13 @@ describe('locomocko', function () {
     });
   });
 
-  it('throws an error when shouldMock() not passed a String', function () {
+  it('throws an error when shouldMockAngular() called with non-String module name', function () {
     var toTry = [null, 4, true, {}, [], new Date(), new RegExp()];
 
     _.each(toTry, function (type) {
 
       try {
-        locomocko.shouldMock(type);
+        locomocko.shouldMockAngular(type);
 
         //fail if execution comes to this point
         false.should.be.true;
@@ -152,18 +152,6 @@ describe('locomocko', function () {
         e.message.should.equal('IllegalArgumentError');
       }
     });
-  });
-
-  it('throws an error when shouldMock() called with unsupported library name', function () {
-    try {
-      locomocko.shouldMock('thisIsNotSupported');
-
-      //fail if execution comes to this point
-      false.should.be.true;
-
-    } catch (e) {
-      e.message.should.equal('Unsupported library');
-    }
   });
 
   it('throws an error when withMethod() not passed a String', function () {

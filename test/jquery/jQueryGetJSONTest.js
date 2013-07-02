@@ -34,7 +34,7 @@ describe('jQuery.getJSON()', function () {
     };
 
   beforeEach(function () {
-    locomocko.shouldMock('jQuery');
+    locomocko.shouldMockJQuery();
   });
 
   afterEach(function () {
