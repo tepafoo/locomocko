@@ -11,4 +11,12 @@
 - do not mock again on multiple calls to shouldMock()
 Angular
 - implement mocked $http with request/response transforms
-- angular: throw error if header() called with non-String type?
+- angular:
+  - throw error if header() called with non-String type?
+  - implement following methods:
+    - $http.get
+    - $http.head
+    - $http.post
+    - $http.put
+    - $http.delete
+    - $http.jsonp
