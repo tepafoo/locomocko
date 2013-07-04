@@ -202,6 +202,13 @@
             config.url = url;
             return http(config);
           };
+
+          http.delete = function (url, config) {
+            config = config || {};
+            config.method = 'DELETE';
+            config.url = url;
+            return http(config);
+          };
           return http;
         }
       },
