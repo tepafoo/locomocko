@@ -20,3 +20,6 @@ Angular
     - $http.put
     - $http.delete
     - $http.jsonp
+  - edge cases:
+    - only return first occurrence of a (key,value) pair in config object
+    - throw error if transformRequest/transformResponse not functions
