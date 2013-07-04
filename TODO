@@ -14,12 +14,9 @@ Angular
 - angular:
   - throw error if header() called with non-String type?
   - implement following methods:
-    - $http.get
     - $http.head
-    - $http.post
-    - $http.put
-    - $http.delete
     - $http.jsonp
   - edge cases:
     - only return first occurrence of a (key,value) pair in config object
     - throw error if transformRequest/transformResponse not functions
+  - commonize tests related to $http.get(), $http.post(), $http.put(), $http.delete()
