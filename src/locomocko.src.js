@@ -188,7 +188,14 @@
             config.url = url;
             return http(config);
           };
-          // TODO -- implement get() method
+
+          http.post = function (url, config) {
+            config = config || {};
+            config.method = 'POST';
+            config.url = url;
+            return http(config);
+          };
+          // TODO -- implement post() method
           return http;
         }
       },
