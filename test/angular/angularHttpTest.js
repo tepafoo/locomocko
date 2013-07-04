@@ -7,7 +7,7 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-describe('angular', function () {
+describe('angular $http()', function () {
 
   var NO_REQUEST_HEADERS = {},
     NO_REQUEST_DATA = 'NO_REQUEST_DATA',
