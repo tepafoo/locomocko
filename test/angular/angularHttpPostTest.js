@@ -9,12 +9,12 @@
 
 describe('angular $http.post()', function () {
 
-  var NO_REQUEST_HEADERS = {},
+  var method = 'POST',
+    NO_REQUEST_HEADERS = {},
     NO_REQUEST_DATA = 'NO_REQUEST_DATA',
     assertHttpServiceMocked = function (done) {
       // given
       var expectedUrl = 'someUrl',
-        method = 'POST',
         expectedResponseData = {
           "someResponseDataKey": "someResponseDataValue"
         };
@@ -47,7 +47,6 @@ describe('angular $http.post()', function () {
     assertHttpServiceMockedWithRequestHeadersWithAnyData = function (done) {
 // given
       var expectedUrl = 'someUrl',
-        method = 'POST',
         requestHeaders = {
           'headerKey1': 'headerValue1',
           'headerKey2': 'headerValue2'
@@ -65,7 +64,6 @@ describe('angular $http.post()', function () {
 
       // given
       var expectedUrl = 'someUrl',
-        method = 'POST',
         requestHeaders = {
           'headerKey1': 'headerValue1',
           'headerKey2': 'headerValue2'
@@ -106,7 +104,6 @@ describe('angular $http.post()', function () {
     assertHttpServiceMockedWithoutHeadersWithAnyData = function (done) {
 // given
       var expectedUrl = 'someUrl',
-        method = 'POST',
         expectedResponseData = {
           "someResponseDataKey": "someResponseDataValue"
         };
@@ -119,7 +116,6 @@ describe('angular $http.post()', function () {
     assertHttpServiceMockedWithAnyDataWithoutHeaders = function (done) {
 // given
       var expectedUrl = 'someUrl',
-        method = 'POST'
       expectedResponseData = {
         "someResponseDataKey": "someResponseDataValue"
       };
@@ -131,7 +127,6 @@ describe('angular $http.post()', function () {
     },
     mockHttpServiceResponseHeaders = function (done) {
       var url = 'someUrl',
-        method = 'POST',
         expectedResponseHeaders = {
           "someResponseHeaderKey1": "someResponseHeaderValue1",
           "someResponseHeaderKey2": "someResponseHeaderValue2"
@@ -178,8 +173,7 @@ describe('angular $http.post()', function () {
     describe('withHeaders() withAnyData()', function () {
       it('returns the passed config object on success', function (done) {
         // given
-        var method = 'POST',
-          url = 'someUrl',
+        var url = 'someUrl',
           requestHeaders = {
             'headerKey1': 'headerValue1',
             'headerKey2': 'headerValue2'
@@ -208,8 +202,7 @@ describe('angular $http.post()', function () {
 
       it('returns the passed config object on error', function (done) {
         // given
-        var method = 'POST',
-          url = 'someUrl',
+        var url = 'someUrl',
           requestHeaders = {
             'headerKey1': 'headerValue1',
             'headerKey2': 'headerValue2'
@@ -258,8 +251,7 @@ describe('angular $http.post()', function () {
         it('mocks angular.$http() POST withHeaders() withData() as expected', function (done) {
 
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -280,8 +272,7 @@ describe('angular $http.post()', function () {
         it('mocks angular.$http() POST withHeaders() withoutData() as expected', function (done) {
 
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -307,8 +298,7 @@ describe('angular $http.post()', function () {
       describe('withoutHeaders() withData()', function () {
         it('mocks angular.$http() POST withoutHeaders() withData() as expected', function (done) {
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestData = {"requestDataKey": "requestDataValue"},
             expectedResponseData = {
               "someResponseDataKey": "someResponseDataValue"
@@ -324,8 +314,7 @@ describe('angular $http.post()', function () {
       describe('withoutHeaders() withoutData()', function () {
         it('mocks angular.$http() POST withoutHeaders() withoutData() as expected', function (done) {
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             expectedResponseData = {
               "someResponseDataKey": "someResponseDataValue"
             };
@@ -340,8 +329,7 @@ describe('angular $http.post()', function () {
       describe('withAnyHeaders() withAnyData()', function () {
         it('mocks angular.$http() POST withAnyHeaders() withAnyData() as expected', function (done) {
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -360,8 +348,7 @@ describe('angular $http.post()', function () {
       describe('withAnyHeaders() withData()', function () {
         it('mocks angular.$http() POST withAnyHeaders() withData() as expected', function (done) {
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -381,8 +368,7 @@ describe('angular $http.post()', function () {
       describe('withAnyHeaders() withoutData()', function () {
         it('mocks angular.$http() POST withAnyHeaders() withoutData() as expected', function (done) {
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -408,8 +394,7 @@ describe('angular $http.post()', function () {
         it('mocks angular.$http() POST withData() withHeaders() as expected', function (done) {
 
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -430,8 +415,7 @@ describe('angular $http.post()', function () {
         it('mocks angular.$http() POST withoutData() withHeaders() as expected', function (done) {
 
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -457,8 +441,7 @@ describe('angular $http.post()', function () {
       describe('withData() withoutHeaders()', function () {
         it('mocks angular.$http() POST withData() withoutHeaders() as expected', function (done) {
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestData = {"requestDataKey": "requestDataValue"},
             expectedResponseData = {
               "someResponseDataKey": "someResponseDataValue"
@@ -474,8 +457,7 @@ describe('angular $http.post()', function () {
       describe('withoutData() withoutHeaders()', function () {
         it('mocks angular.$http() POST withoutData() withoutHeaders() as expected', function (done) {
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             expectedResponseData = {
               "someResponseDataKey": "someResponseDataValue"
             };
@@ -490,8 +472,7 @@ describe('angular $http.post()', function () {
       describe('withAnyData() withAnyHeaders()', function () {
         it('mocks angular.$http() POST withAnyData() withAnyHeaders() as expected', function (done) {
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -510,8 +491,7 @@ describe('angular $http.post()', function () {
       describe('withData() withAnyHeaders()', function () {
         it('mocks angular.$http() POST withData() withAnyHeaders() as expected', function (done) {
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -531,8 +511,7 @@ describe('angular $http.post()', function () {
       describe('withoutData() withAnyHeaders()', function () {
         it('mocks angular.$http() POST withoutData() withAnyHeaders() as expected', function (done) {
           // given
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -552,8 +531,7 @@ describe('angular $http.post()', function () {
         it('mocks angular.$http() POST thenRespond().withHeaders().withData().withStatusCode() as expected', function (done) {
 
           // given
-          var method = 'POST',
-            url = 'someUrl',
+          var url = 'someUrl',
             expectedStatusCode = 500,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -596,8 +574,7 @@ describe('angular $http.post()', function () {
         it('mocks angular.$http() POST thenRespond().withData().withHeaders().withStatusCode() as expected', function (done) {
 
           // given
-          var method = 'POST',
-            url = 'someUrl',
+          var url = 'someUrl',
             expectedStatusCode = 404,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -641,8 +618,7 @@ describe('angular $http.post()', function () {
         it('mocks angular.$http() POST thenRespond().withHeaders().withStatusCode().withData() as expected', function (done) {
 
           // given
-          var method = 'POST',
-            url = 'someUrl',
+          var url = 'someUrl',
             expectedStatusCode = 500,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -686,8 +662,7 @@ describe('angular $http.post()', function () {
         it('mocks angular.$http() POST thenRespond().withData().withStatusCode().withHeaders() as expected', function (done) {
 
           // given
-          var method = 'POST',
-            url = 'someUrl',
+          var url = 'someUrl',
             expectedStatusCode = 404,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -731,8 +706,7 @@ describe('angular $http.post()', function () {
         it('mocks angular.$http() POST thenRespond().withStatusCode().withHeaders().withData() as expected', function (done) {
 
           // given
-          var method = 'POST',
-            url = 'someUrl',
+          var url = 'someUrl',
             expectedStatusCode = 500,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -774,8 +748,7 @@ describe('angular $http.post()', function () {
         it('mocks angular.$http() POST thenRespond().withStatusCode().withData().withHeaders() as expected', function (done) {
 
           // given
-          var method = 'POST',
-            url = 'someUrl',
+          var url = 'someUrl',
             expectedStatusCode = 404,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -820,7 +793,6 @@ describe('angular $http.post()', function () {
       it('uses the last mock setup when called multiple times for the same POST URL with data', function (done) {
         // given
         var expectedUrl = 'someUrl',
-          method = 'POST',
           requestData = {"requestKey": "requestValue"},
           expectedResponseData = {
             "lastResponseDataKey": "lastResponseDataValue"
@@ -833,8 +805,7 @@ describe('angular $http.post()', function () {
       });
 
       it('mocks angular.$http() for the same POST URL but with different request payloads as expected', function (done) {
-        var method = 'POST',
-          expectedUrl = 'someUrl',
+        var expectedUrl = 'someUrl',
           firstRequestData = {
             "firstRequestDataKey": "firstRequestDataValue"
           },
@@ -860,8 +831,7 @@ describe('angular $http.post()', function () {
 
       it('mocks angular.$http() for a mixture of withData(), withAnyData() and  withoutData() on the same URL as expected', function (done) {
         // given
-        var method = 'POST',
-          expectedUrl = 'someUrl',
+        var expectedUrl = 'someUrl',
           firstRequestData = {
             "someFirstRequestDataKey": "someFirstRequestDataValue"
           },
@@ -901,8 +871,7 @@ describe('angular $http.post()', function () {
 
       describe('different withHeaders(), same with{{Any/out}}Data()', function () {
         it('mocks angular.$http() for different withHeaders() but same withData()', function (done) {
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestData = {
               "requestDataKey": "requestDataValue"
             },
@@ -930,8 +899,7 @@ describe('angular $http.post()', function () {
         });
 
         it('mocks angular.$http() for different withHeaders() but same withAnyData()', function (done) {
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             firstRequestHeaders = {
               "firstRequestHeaderKey": "firstRequestHeaderValue"
             },
@@ -956,8 +924,7 @@ describe('angular $http.post()', function () {
         });
 
         it('mocks angular.$http() for different withHeaders() but same withoutData()', function (done) {
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             firstRequestHeaders = {
               "firstRequestHeaderKey": "firstRequestHeaderValue"
             },
@@ -991,8 +958,7 @@ describe('angular $http.post()', function () {
 
       describe('same with{{Any/out}}Headers(), different withData()', function () {
         it('mocks angular.$http() for same withHeaders() but different withData()', function (done) {
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               "firstRequestHeaderKey": "firstRequestHeaderValue"
             },
@@ -1020,8 +986,7 @@ describe('angular $http.post()', function () {
         });
 
         it('mocks angular.$http() for same withAnyHeaders() but different withData()', function (done) {
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             firstRequestData = {
               "firstRequestDataKey": "firstRequestDataValue"
             },
@@ -1046,8 +1011,7 @@ describe('angular $http.post()', function () {
         });
 
         it('mocks angular.$http() for same withoutHeaders() but different withData()', function (done) {
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             firstRequestData = {
               "firstRequestDataKey": "firstRequestDataValue"
             },
@@ -1074,8 +1038,7 @@ describe('angular $http.post()', function () {
 
       describe('mixture of with{{Any/out}}Headers(), same with{{Any/out}}Data()', function () {
         it('mocks angular.$http() for mixture of with{{Any/out}}Headers() but same withData()', function (done) {
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestData = {
               "requestDataKey": "requestDataValue"
             },
@@ -1107,8 +1070,7 @@ describe('angular $http.post()', function () {
         });
 
         it('mocks angular.$http() for mixture of with{{Any/out}}Headers() but same withAnyData()', function (done) {
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             expectedFirstResponseData = {
               "firstResponseDataKey": "firstResponseDataValue"
             },
@@ -1137,8 +1099,7 @@ describe('angular $http.post()', function () {
         });
 
         it('mocks angular.$http() for mixture of with{{Any/out}}Headers() but same withoutData()', function (done) {
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             expectedFirstResponseData = {
               "firstResponseDataKey": "firstResponseDataValue"
             },
@@ -1169,8 +1130,7 @@ describe('angular $http.post()', function () {
 
       describe('same with{{Any/out}}Headers(), mixture of with{{Any/out}}Data()', function () {
         it('mocks angular.$http() for same withHeaders() but mixture of with{{Any/out}}Data()', function (done) {
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               "requestHeaderKey": "requestHeaderValue"
             },
@@ -1202,8 +1162,7 @@ describe('angular $http.post()', function () {
         });
 
         it('mocks angular.$http() for same withAnyHeaders() but mixture of with{{Any/out}}Data()', function (done) {
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestData = {
               "requestDataKey": "requestDataValue"
             },
@@ -1232,8 +1191,7 @@ describe('angular $http.post()', function () {
         });
 
         it('mocks angular.$http() for same withoutHeaders() but mixture of with{{Any/out}}Data()', function (done) {
-          var method = 'POST',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestData = {
               "requestDataKey": "requestDataValue"
             },
@@ -1264,8 +1222,7 @@ describe('angular $http.post()', function () {
 
       describe('mixture of whenUrl().withData().withHeaders() combined with mixture of thenRespond().withData().withHeaders()', function () {
         it('mocks angular.$http()', function (done) {
-          var method = 'POST',
-            url = 'someUrl',
+          var url = 'someUrl',
             requestHeaders = {
               "requestHeaderKey": "requestHeaderValue"
             },
@@ -1368,8 +1325,7 @@ describe('angular $http.post()', function () {
 
       describe('mixture of whenUrl().withHeaders().withData() combined with mixture of thenRespond().withHeaders().withData()', function () {
         it('mocks angular.$http()', function (done) {
-          var method = 'POST',
-            url = 'someUrl',
+          var url = 'someUrl',
             requestHeaders = {
               "requestHeaderKey": "requestHeaderValue"
             },
