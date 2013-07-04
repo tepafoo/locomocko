@@ -195,7 +195,13 @@
             config.url = url;
             return http(config);
           };
-          // TODO -- implement post() method
+
+          http.put = function (url, config) {
+            config = config || {};
+            config.method = 'PUT';
+            config.url = url;
+            return http(config);
+          };
           return http;
         }
       },
