@@ -184,7 +184,7 @@
 
           http.get = function (url, config) {
             config = config || {};
-            config.method = 'get';
+            config.method = 'GET';
             config.url = url;
             return http(config);
           };
