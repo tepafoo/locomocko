@@ -9,9 +9,10 @@
 
 describe('angular $http.put()', function () {
 
-  var NO_REQUEST_HEADERS = {},
+  var method = 'PUT',
+    NO_REQUEST_HEADERS = {},
     NO_REQUEST_DATA = 'NO_REQUEST_DATA',
-    assertHttpServiceMocked = function (method, done) {
+    assertHttpServiceMocked = function (done) {
       // given
       var expectedUrl = 'someUrl',
         expectedResponseData = {
@@ -21,9 +22,9 @@ describe('angular $http.put()', function () {
       locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().thenRespond().withData(expectedResponseData);
 
       // when and then
-      assertHttpServiceCalled(expectedUrl, method, null, expectedResponseData, done);
+      assertHttpServiceCalled(expectedUrl, null, expectedResponseData, done);
     },
-    assertHttpServiceCalled = function (expectedUrl, method, requestData, expectedResponseData, done) {
+    assertHttpServiceCalled = function (expectedUrl, requestData, expectedResponseData, done) {
       var success = function (data, status, headers, config) {
           status.should.equal(200);
           JSON.stringify(data).should.equal(JSON.stringify(expectedResponseData));
@@ -43,7 +44,7 @@ describe('angular $http.put()', function () {
         angularHttpPut(expectedUrl, {data: requestData}).success(success).error(error);
       }
     },
-    assertHttpServiceMockedWithRequestHeadersWithAnyData = function (method, done) {
+    assertHttpServiceMockedWithRequestHeadersWithAnyData = function (done) {
 // given
       var expectedUrl = 'someUrl',
         requestHeaders = {
@@ -57,9 +58,9 @@ describe('angular $http.put()', function () {
       locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withAnyData().thenRespond().withData(expectedResponseData);
 
       // when and then
-      assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
+      assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
     },
-    assertHttpServiceMockedWithAnyDataWithRequestHeaders = function (method, done) {
+    assertHttpServiceMockedWithAnyDataWithRequestHeaders = function (done) {
 // given
       var expectedUrl = 'someUrl',
         requestHeaders = {
@@ -73,9 +74,9 @@ describe('angular $http.put()', function () {
       locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().withHeaders(requestHeaders).thenRespond().withData(expectedResponseData);
 
       // when and then
-      assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
+      assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
     },
-    assertHttpServiceCalledWithRequestHeaders = function (expectedUrl, method, requestHeaders, requestData, expectedResponseData, done) {
+    assertHttpServiceCalledWithRequestHeaders = function (expectedUrl, requestHeaders, requestData, expectedResponseData, done) {
       var options = {
           headers: requestHeaders
         },
@@ -99,7 +100,7 @@ describe('angular $http.put()', function () {
 
       angularHttpPut(expectedUrl, options).success(success).error(error);
     },
-    assertHttpServiceMockedWithoutHeadersWithAnyData = function (method, done) {
+    assertHttpServiceMockedWithoutHeadersWithAnyData = function (done) {
 // given
       var expectedUrl = 'someUrl',
         expectedResponseData = {
@@ -109,9 +110,9 @@ describe('angular $http.put()', function () {
       locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withAnyData().thenRespond().withData(expectedResponseData);
 
       // when and then
-      assertHttpServiceCalled(expectedUrl, method, NO_REQUEST_DATA, expectedResponseData, done);
+      assertHttpServiceCalled(expectedUrl, NO_REQUEST_DATA, expectedResponseData, done);
     },
-    assertHttpServiceMockedWithAnyDataWithoutHeaders = function (method, done) {
+    assertHttpServiceMockedWithAnyDataWithoutHeaders = function (done) {
 // given
       var expectedUrl = 'someUrl',
         expectedResponseData = {
@@ -121,9 +122,9 @@ describe('angular $http.put()', function () {
       locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().withoutHeaders().thenRespond().withData(expectedResponseData);
 
       // when and then
-      assertHttpServiceCalled(expectedUrl, method, NO_REQUEST_DATA, expectedResponseData, done);
+      assertHttpServiceCalled(expectedUrl, NO_REQUEST_DATA, expectedResponseData, done);
     },
-    mockHttpServiceResponseHeaders = function (method, done) {
+    mockHttpServiceResponseHeaders = function (done) {
       var url = 'someUrl',
         expectedResponseHeaders = {
           "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -171,8 +172,7 @@ describe('angular $http.put()', function () {
     describe('withHeaders() withAnyData()', function () {
       it('returns the passed config object on success', function (done) {
         // given
-        var method = 'PUT',
-          url = 'someUrl',
+        var url = 'someUrl',
           requestHeaders = {
             'headerKey1': 'headerValue1',
             'headerKey2': 'headerValue2'
@@ -201,8 +201,7 @@ describe('angular $http.put()', function () {
 
       it('returns the passed config object on error', function (done) {
         // given
-        var method = 'PUT',
-          url = 'someUrl',
+        var url = 'someUrl',
           requestHeaders = {
             'headerKey1': 'headerValue1',
             'headerKey2': 'headerValue2'
@@ -233,17 +232,17 @@ describe('angular $http.put()', function () {
 
       describe('simple cases', function () {
         it('mocks angular.$http() PUT as expected', function (done) {
-          assertHttpServiceMocked('PUT', done);
+          assertHttpServiceMocked(done);
         });
 
         it('mocks angular.$http() PUT as expected thenRespond().withHeaders()', function (done) {
-          mockHttpServiceResponseHeaders('PUT', done);
+          mockHttpServiceResponseHeaders(done);
         });
       });
 
       describe('withHeaders() withAnyData()', function () {
         it('mocks angular.$http() PUT withHeaders() withAnyData() as expected', function (done) {
-          assertHttpServiceMockedWithRequestHeadersWithAnyData('PUT', done);
+          assertHttpServiceMockedWithRequestHeadersWithAnyData(done);
         });
       });
 
@@ -251,8 +250,7 @@ describe('angular $http.put()', function () {
         it('mocks angular.$http() PUT withHeaders() withData() as expected', function (done) {
 
           // given
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -265,7 +263,7 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withData(requestData).thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, requestData, expectedResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, requestData, expectedResponseData, done);
         });
       });
 
@@ -273,8 +271,7 @@ describe('angular $http.put()', function () {
         it('mocks angular.$http() PUT withHeaders() withoutData() as expected', function (done) {
 
           // given
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -287,21 +284,20 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withoutData().thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
         });
       });
 
       describe('withoutHeaders() withAnyData()', function () {
         it('mocks angular.$http() PUT withoutHeaders() withAnyData() as expected', function (done) {
-          assertHttpServiceMockedWithoutHeadersWithAnyData('PUT', done);
+          assertHttpServiceMockedWithoutHeadersWithAnyData(done);
         });
       });
 
       describe('withoutHeaders() withData()', function () {
         it('mocks angular.$http() PUT withoutHeaders() withData() as expected', function (done) {
           // given
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestData = {"requestDataKey": "requestDataValue"},
             expectedResponseData = {
               "someResponseDataKey": "someResponseDataValue"
@@ -310,15 +306,14 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(requestData).thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalled(expectedUrl, method, requestData, expectedResponseData, done);
+          assertHttpServiceCalled(expectedUrl, requestData, expectedResponseData, done);
         });
       });
 
       describe('withoutHeaders() withoutData()', function () {
         it('mocks angular.$http() PUT withoutHeaders() withoutData() as expected', function (done) {
           // given
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             expectedResponseData = {
               "someResponseDataKey": "someResponseDataValue"
             };
@@ -326,14 +321,12 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withoutData().thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalled(expectedUrl, method, NO_REQUEST_DATA, expectedResponseData, done);
+          assertHttpServiceCalled(expectedUrl, NO_REQUEST_DATA, expectedResponseData, done);
         });
       });
 
       describe('withAnyHeaders() withAnyData()', function () {
         it('mocks angular.$http() PUT withAnyHeaders() withAnyData() as expected', function (done) {
-          var method = 'PUT';
-
           // given
           var expectedUrl = 'someUrl',
             requestHeaders = {
@@ -347,14 +340,12 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withAnyData().thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
         });
       });
 
       describe('withAnyHeaders() withData()', function () {
         it('mocks angular.$http() PUT withAnyHeaders() withData() as expected', function (done) {
-          var method = 'PUT';
-
           // given
           var expectedUrl = 'someUrl',
             requestHeaders = {
@@ -369,14 +360,12 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(requestData).thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, requestData, expectedResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, requestData, expectedResponseData, done);
         });
       });
 
       describe('withAnyHeaders() withoutData()', function () {
         it('mocks angular.$http() PUT withAnyHeaders() withoutData() as expected', function (done) {
-          var method = 'PUT';
-
           // given
           var expectedUrl = 'someUrl',
             requestHeaders = {
@@ -390,13 +379,13 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withoutData().thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
         });
       });
 
       describe('withAnyData() withHeaders()', function () {
         it('mocks angular.$http() PUT withAnyData() withHeaders() as expected', function (done) {
-          assertHttpServiceMockedWithAnyDataWithRequestHeaders('PUT', done);
+          assertHttpServiceMockedWithAnyDataWithRequestHeaders(done);
         });
       });
 
@@ -404,8 +393,7 @@ describe('angular $http.put()', function () {
         it('mocks angular.$http() PUT withData() withHeaders() as expected', function (done) {
 
           // given
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -418,7 +406,7 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withData(requestData).withHeaders(requestHeaders).thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, requestData, expectedResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, requestData, expectedResponseData, done);
         });
       });
 
@@ -426,8 +414,7 @@ describe('angular $http.put()', function () {
         it('mocks angular.$http() PUT withoutData() withHeaders() as expected', function (done) {
 
           // given
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               'headerKey1': 'headerValue1',
               'headerKey2': 'headerValue2'
@@ -440,21 +427,20 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().withHeaders(requestHeaders).thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
         });
       });
 
       describe('withAnyData() withoutHeaders()', function () {
         it('mocks angular.$http() PUT withAnyData() withoutHeaders() as expected', function (done) {
-          assertHttpServiceMockedWithAnyDataWithoutHeaders('PUT', done);
+          assertHttpServiceMockedWithAnyDataWithoutHeaders(done);
         });
       });
 
       describe('withData() withoutHeaders()', function () {
         it('mocks angular.$http() PUT withData() withoutHeaders() as expected', function (done) {
           // given
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestData = {"requestDataKey": "requestDataValue"},
             expectedResponseData = {
               "someResponseDataKey": "someResponseDataValue"
@@ -463,15 +449,14 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withData(requestData).withoutHeaders().thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalled(expectedUrl, method, requestData, expectedResponseData, done);
+          assertHttpServiceCalled(expectedUrl, requestData, expectedResponseData, done);
         });
       });
 
       describe('withoutData() withoutHeaders()', function () {
         it('mocks angular.$http() PUT withoutData() withoutHeaders() as expected', function (done) {
           // given
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             expectedResponseData = {
               "someResponseDataKey": "someResponseDataValue"
             };
@@ -479,14 +464,12 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().withoutHeaders().thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalled(expectedUrl, method, NO_REQUEST_DATA, expectedResponseData, done);
+          assertHttpServiceCalled(expectedUrl, NO_REQUEST_DATA, expectedResponseData, done);
         });
       });
 
       describe('withAnyData() withAnyHeaders()', function () {
         it('mocks angular.$http() PUT withAnyData() withAnyHeaders() as expected', function (done) {
-          var method = 'PUT';
-
           // given
           var expectedUrl = 'someUrl',
             requestHeaders = {
@@ -500,14 +483,12 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withAnyData().withAnyHeaders().thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
         });
       });
 
       describe('withData() withAnyHeaders()', function () {
         it('mocks angular.$http() PUT withData() withAnyHeaders() as expected', function (done) {
-          var method = 'PUT';
-
           // given
           var expectedUrl = 'someUrl',
             requestHeaders = {
@@ -522,14 +503,12 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withData(requestData).withAnyHeaders().thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, requestData, expectedResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, requestData, expectedResponseData, done);
         });
       });
 
       describe('withoutData() withAnyHeaders()', function () {
         it('mocks angular.$http() PUT withoutData() withAnyHeaders() as expected', function (done) {
-          var method = 'PUT';
-
           // given
           var expectedUrl = 'someUrl',
             requestHeaders = {
@@ -543,7 +522,7 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().withAnyHeaders().thenRespond().withData(expectedResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, NO_REQUEST_DATA, expectedResponseData, done);
         });
       });
 
@@ -551,8 +530,7 @@ describe('angular $http.put()', function () {
         it('mocks angular.$http() PUT thenRespond().withHeaders().withData().withStatusCode() as expected', function (done) {
 
           // given
-          var method = 'PUT',
-            url = 'someUrl',
+          var url = 'someUrl',
             expectedStatusCode = 404,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -595,8 +573,7 @@ describe('angular $http.put()', function () {
         it('mocks angular.$http() PUT thenRespond().withData().withHeaders().withStatusCode() as expected', function (done) {
 
           // given
-          var method = 'PUT',
-            url = 'someUrl',
+          var url = 'someUrl',
             expectedStatusCode = 503,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -638,8 +615,7 @@ describe('angular $http.put()', function () {
         it('mocks angular.$http() PUT thenRespond().withHeaders().withStatusCode().withData() as expected', function (done) {
 
           // given
-          var method = 'PUT',
-            url = 'someUrl',
+          var url = 'someUrl',
             expectedStatusCode = 404,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -683,8 +659,7 @@ describe('angular $http.put()', function () {
         it('mocks angular.$http() PUT thenRespond().withData().withStatusCode().withHeaders() as expected', function (done) {
 
           // given
-          var method = 'PUT',
-            url = 'someUrl',
+          var url = 'someUrl',
             expectedStatusCode = 503,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -726,8 +701,7 @@ describe('angular $http.put()', function () {
         it('mocks angular.$http() PUT thenRespond().withStatusCode().withHeaders().withData() as expected', function (done) {
 
           // given
-          var method = 'PUT',
-            url = 'someUrl',
+          var url = 'someUrl',
             expectedStatusCode = 404,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -770,8 +744,7 @@ describe('angular $http.put()', function () {
         it('mocks angular.$http() PUT thenRespond().withStatusCode().withData().withHeaders() as expected', function (done) {
 
           // given
-          var method = 'PUT',
-            url = 'someUrl',
+          var url = 'someUrl',
             expectedStatusCode = 503,
             expectedResponseHeaders = {
               "someResponseHeaderKey1": "someResponseHeaderValue1",
@@ -819,11 +792,11 @@ describe('angular $http.put()', function () {
             "lastResponseDataKey": "lastResponseDataValue"
           };
 
-        locomocko.whenUrl(expectedUrl).withMethod('PUT').withoutData().thenRespond().withData({"notExpectedResponseKey": "notExpectedResponseValue"});
-        locomocko.whenUrl(expectedUrl).withMethod('PUT').withoutData().thenRespond().withData(expectedResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().thenRespond().withData({"notExpectedResponseKey": "notExpectedResponseValue"});
+        locomocko.whenUrl(expectedUrl).withMethod(method).withoutData().thenRespond().withData(expectedResponseData);
 
         // when and then
-        assertHttpServiceCalled(expectedUrl, 'PUT', NO_REQUEST_DATA, expectedResponseData, done);
+        assertHttpServiceCalled(expectedUrl, NO_REQUEST_DATA, expectedResponseData, done);
       });
 
       it('uses the last mock setup when called multiple times for the same PUT URL with data', function (done) {
@@ -834,16 +807,15 @@ describe('angular $http.put()', function () {
             "lastResponseDataKey": "lastResponseDataValue"
           };
 
-        locomocko.whenUrl(expectedUrl).withMethod('PUT').withData(requestData).thenRespond().withData({"notExpectedResponseKey": "notExpectedResponseValue"});
-        locomocko.whenUrl(expectedUrl).withMethod('PUT').withData(requestData).thenRespond().withData(expectedResponseData);
+        locomocko.whenUrl(expectedUrl).withMethod(method).withData(requestData).thenRespond().withData({"notExpectedResponseKey": "notExpectedResponseValue"});
+        locomocko.whenUrl(expectedUrl).withMethod(method).withData(requestData).thenRespond().withData(expectedResponseData);
 
         // when and then
-        assertHttpServiceCalled(expectedUrl, 'PUT', requestData, expectedResponseData, done);
+        assertHttpServiceCalled(expectedUrl, requestData, expectedResponseData, done);
       });
 
       it('mocks angular.$http() for the same PUT URL but with different request payloads as expected', function (done) {
-        var method = 'PUT',
-          expectedUrl = 'someUrl',
+        var expectedUrl = 'someUrl',
           firstRequestData = {
             "firstRequestDataKey": "firstRequestDataValue"
           },
@@ -861,16 +833,15 @@ describe('angular $http.put()', function () {
         locomocko.whenUrl(expectedUrl).withMethod(method).withData(secondRequestData).thenRespond().withData(expectedSecondResponseData);
 
         // when and then
-        assertHttpServiceCalled(expectedUrl, method, firstRequestData, expectedFirstResponseData);
+        assertHttpServiceCalled(expectedUrl, firstRequestData, expectedFirstResponseData);
 
         // when and then
-        assertHttpServiceCalled(expectedUrl, method, secondRequestData, expectedSecondResponseData, done);
+        assertHttpServiceCalled(expectedUrl, secondRequestData, expectedSecondResponseData, done);
       });
 
       it('mocks angular.$http() for a mixture of withData(), withAnyData() and  withoutData() on the same URL as expected', function (done) {
         // given
-        var method = 'PUT',
-          expectedUrl = 'someUrl',
+        var expectedUrl = 'someUrl',
           firstRequestData = {
             "someFirstRequestDataKey": "someFirstRequestDataValue"
           },
@@ -896,22 +867,21 @@ describe('angular $http.put()', function () {
         locomocko.whenUrl(expectedUrl).withMethod(method).withData(fourthRequestData).thenRespond().withData(expectedFourthResponseData);
 
         // when and then
-        assertHttpServiceCalled(expectedUrl, method, firstRequestData, expectedFirstResponseData);
+        assertHttpServiceCalled(expectedUrl, firstRequestData, expectedFirstResponseData);
 
         // when and then
-        assertHttpServiceCalled(expectedUrl, method, {"anyKey": "anyValue"}, expectedSecondResponseData);
+        assertHttpServiceCalled(expectedUrl, {"anyKey": "anyValue"}, expectedSecondResponseData);
 
         // when and then
-        assertHttpServiceCalled(expectedUrl, method, NO_REQUEST_DATA, expectedThirdResponseData);
+        assertHttpServiceCalled(expectedUrl, NO_REQUEST_DATA, expectedThirdResponseData);
 
         // when and then
-        assertHttpServiceCalled(expectedUrl, method, fourthRequestData, expectedFourthResponseData, done);
+        assertHttpServiceCalled(expectedUrl, fourthRequestData, expectedFourthResponseData, done);
       });
 
       describe('different withHeaders(), same with{{Any/out}}Data()', function () {
         it('mocks angular.$http() for different withHeaders() but same withData()', function (done) {
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestData = {
               "requestDataKey": "requestDataValue"
             },
@@ -932,15 +902,14 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(secondRequestHeaders).withData(requestData).thenRespond().withData(expectedSecondResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, firstRequestHeaders, requestData, expectedFirstResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, firstRequestHeaders, requestData, expectedFirstResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, secondRequestHeaders, requestData, expectedSecondResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, secondRequestHeaders, requestData, expectedSecondResponseData, done);
         });
 
         it('mocks angular.$http() for different withHeaders() but same withAnyData()', function (done) {
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             firstRequestHeaders = {
               "firstRequestHeaderKey": "firstRequestHeaderValue"
             },
@@ -958,15 +927,14 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(secondRequestHeaders).withAnyData().thenRespond().withData(expectedSecondResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, firstRequestHeaders, ["anyData1"], expectedFirstResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, firstRequestHeaders, ["anyData1"], expectedFirstResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, secondRequestHeaders, {"randomNumber": Math.random()}, expectedSecondResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, secondRequestHeaders, {"randomNumber": Math.random()}, expectedSecondResponseData, done);
         });
 
         it('mocks angular.$http() for different withHeaders() but same withoutData()', function (done) {
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             firstRequestHeaders = {
               "firstRequestHeaderKey": "firstRequestHeaderValue"
             },
@@ -988,20 +956,19 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withoutData().thenRespond().withData(expectedThirdResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, firstRequestHeaders, NO_REQUEST_DATA, expectedFirstResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, firstRequestHeaders, NO_REQUEST_DATA, expectedFirstResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, secondRequestHeaders, NO_REQUEST_DATA, expectedSecondResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, secondRequestHeaders, NO_REQUEST_DATA, expectedSecondResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, NO_REQUEST_DATA, expectedThirdResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, NO_REQUEST_HEADERS, NO_REQUEST_DATA, expectedThirdResponseData, done);
         });
       });
 
       describe('same with{{Any/out}}Headers(), different withData()', function () {
         it('mocks angular.$http() for same withHeaders() but different withData()', function (done) {
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               "firstRequestHeaderKey": "firstRequestHeaderValue"
             },
@@ -1022,15 +989,14 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withData(secondRequestData).thenRespond().withData(expectedSecondResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, firstRequestData, expectedFirstResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, firstRequestData, expectedFirstResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, secondRequestData, expectedSecondResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, secondRequestData, expectedSecondResponseData, done);
         });
 
         it('mocks angular.$http() for same withAnyHeaders() but different withData()', function (done) {
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             firstRequestData = {
               "firstRequestDataKey": "firstRequestDataValue"
             },
@@ -1048,15 +1014,14 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(secondRequestData).thenRespond().withData(expectedSecondResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, {"blah": "bloh"}, firstRequestData, expectedFirstResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, {"blah": "bloh"}, firstRequestData, expectedFirstResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, {"notBlah": "notBloh"}, secondRequestData, expectedSecondResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, {"notBlah": "notBloh"}, secondRequestData, expectedSecondResponseData, done);
         });
 
         it('mocks angular.$http() for same withoutHeaders() but different withData()', function (done) {
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             firstRequestData = {
               "firstRequestDataKey": "firstRequestDataValue"
             },
@@ -1074,17 +1039,16 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(secondRequestData).thenRespond().withData(expectedSecondResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, firstRequestData, expectedFirstResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, NO_REQUEST_HEADERS, firstRequestData, expectedFirstResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, secondRequestData, expectedSecondResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, NO_REQUEST_HEADERS, secondRequestData, expectedSecondResponseData, done);
         });
       });
 
       describe('mixture of with{{Any/out}}Headers(), same with{{Any/out}}Data()', function () {
         it('mocks angular.$http() for mixture of with{{Any/out}}Headers() but same withData()', function (done) {
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestData = {
               "requestDataKey": "requestDataValue"
             },
@@ -1106,18 +1070,17 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(thirdRequestHeaders).withData(requestData).thenRespond().withData(expectedThirdResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, requestData, expectedFirstResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, NO_REQUEST_HEADERS, requestData, expectedFirstResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, {"anyKey": "anyValue"}, requestData, expectedSecondResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, {"anyKey": "anyValue"}, requestData, expectedSecondResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, thirdRequestHeaders, requestData, expectedThirdResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, thirdRequestHeaders, requestData, expectedThirdResponseData, done);
         });
 
         it('mocks angular.$http() for mixture of with{{Any/out}}Headers() but same withAnyData()', function (done) {
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             expectedFirstResponseData = {
               "firstResponseDataKey": "firstResponseDataValue"
             },
@@ -1136,18 +1099,17 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(thirdRequestHeaders).withAnyData().thenRespond().withData(expectedThirdResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, {"anyData1": "anyData1"}, expectedFirstResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, NO_REQUEST_HEADERS, {"anyData1": "anyData1"}, expectedFirstResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, {"anyKey": "anyValue"}, {"anyData2": "anyData2"}, expectedSecondResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, {"anyKey": "anyValue"}, {"anyData2": "anyData2"}, expectedSecondResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, thirdRequestHeaders, {"anyData3": "anyData3"}, expectedThirdResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, thirdRequestHeaders, {"anyData3": "anyData3"}, expectedThirdResponseData, done);
         });
 
         it('mocks angular.$http() for mixture of with{{Any/out}}Headers() but same withoutData()', function (done) {
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             expectedFirstResponseData = {
               "firstResponseDataKey": "firstResponseDataValue"
             },
@@ -1166,20 +1128,19 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(thirdRequestHeaders).withoutData().thenRespond().withData(expectedThirdResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, NO_REQUEST_DATA, expectedFirstResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, NO_REQUEST_HEADERS, NO_REQUEST_DATA, expectedFirstResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, {"anyKey": "anyValue"}, NO_REQUEST_DATA, expectedSecondResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, {"anyKey": "anyValue"}, NO_REQUEST_DATA, expectedSecondResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, thirdRequestHeaders, NO_REQUEST_DATA, expectedThirdResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, thirdRequestHeaders, NO_REQUEST_DATA, expectedThirdResponseData, done);
         });
       });
 
       describe('same with{{Any/out}}Headers(), mixture of with{{Any/out}}Data()', function () {
         it('mocks angular.$http() for same withHeaders() but mixture of with{{Any/out}}Data()', function (done) {
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestHeaders = {
               "requestHeaderKey": "requestHeaderValue"
             },
@@ -1201,18 +1162,17 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withHeaders(requestHeaders).withData(requestData).thenRespond().withData(expectedThirdResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, NO_REQUEST_DATA, expectedFirstResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, NO_REQUEST_DATA, expectedFirstResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, {"anyKey": "anyValue"}, expectedSecondResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, {"anyKey": "anyValue"}, expectedSecondResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, requestHeaders, requestData, expectedThirdResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, requestHeaders, requestData, expectedThirdResponseData, done);
         });
 
         it('mocks angular.$http() for same withAnyHeaders() but mixture of with{{Any/out}}Data()', function (done) {
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestData = {
               "requestDataKey": "requestDataValue"
             },
@@ -1231,18 +1191,17 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withData(requestData).thenRespond().withData(expectedThirdResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, {"anyHeader1": "anyHeader1"}, NO_REQUEST_DATA, expectedFirstResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, {"anyHeader1": "anyHeader1"}, NO_REQUEST_DATA, expectedFirstResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, {"anyHeader2": "anyHeader2"}, {"anyData2": "anyData2"}, expectedSecondResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, {"anyHeader2": "anyHeader2"}, {"anyData2": "anyData2"}, expectedSecondResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, {"anyHeader3": "anyHeader3"}, requestData, expectedThirdResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, {"anyHeader3": "anyHeader3"}, requestData, expectedThirdResponseData, done);
         });
 
         it('mocks angular.$http() for same withoutHeaders() but mixture of with{{Any/out}}Data()', function (done) {
-          var method = 'PUT',
-            expectedUrl = 'someUrl',
+          var expectedUrl = 'someUrl',
             requestData = {
               "requestDataKey": "requestDataValue"
             },
@@ -1261,20 +1220,19 @@ describe('angular $http.put()', function () {
           locomocko.whenUrl(expectedUrl).withMethod(method).withoutHeaders().withData(requestData).thenRespond().withData(expectedThirdResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, NO_REQUEST_DATA, expectedFirstResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, NO_REQUEST_HEADERS, NO_REQUEST_DATA, expectedFirstResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, {"anyData2": "anyData2"}, expectedSecondResponseData);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, NO_REQUEST_HEADERS, {"anyData2": "anyData2"}, expectedSecondResponseData);
 
           // when and then
-          assertHttpServiceCalledWithRequestHeaders(expectedUrl, method, NO_REQUEST_HEADERS, requestData, expectedThirdResponseData, done);
+          assertHttpServiceCalledWithRequestHeaders(expectedUrl, NO_REQUEST_HEADERS, requestData, expectedThirdResponseData, done);
         });
       });
 
       describe('mixture of whenUrl().withData().withHeaders() combined with mixture of thenRespond().withData().withHeaders()', function () {
         it('mocks angular.$http()', function (done) {
-          var method = 'PUT',
-            url = 'someUrl',
+          var url = 'someUrl',
             requestHeaders = {
               "requestHeaderKey": "requestHeaderValue"
             },
@@ -1377,8 +1335,7 @@ describe('angular $http.put()', function () {
 
       describe('mixture of whenUrl().withHeaders().withData() combined with mixture of thenRespond().withHeaders().withData()', function () {
         it('mocks angular.$http()', function (done) {
-          var method = 'PUT',
-            url = 'someUrl',
+          var url = 'someUrl',
             requestHeaders = {
               "requestHeaderKey": "requestHeaderValue"
             },
