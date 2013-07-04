@@ -147,7 +147,7 @@
       },
       angularHttpProvider: {
         $get: function () {
-          return function (options) {
+          var http = function (options) {
             var response = libraryMocks.getResponse(options),
               statusCode = response.getStatusCode(),
               headers = response.getHeaders(),
@@ -180,7 +180,16 @@
                 error: toCall
               };
             }
-          }
+          };
+
+          http.get = function (url, config) {
+            config = config || {};
+            config.method = 'get';
+            config.url = url;
+            return http(config);
+          };
+          // TODO -- implement get() method
+          return http;
         }
       },
       normalize: function (options) {
