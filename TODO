@@ -12,6 +12,7 @@
 Angular
 - implement mocked $http with request/response transforms
 - angular:
+  - implement http promise then() method
   - throw error if header() called with non-String type?
   - implement following methods:
     - $http.head
