@@ -9,6 +9,11 @@
 
 function _angularHttpMethodTest(method) {
 
+  var angularMethod = method.toLocaleLowerCase();
+
+  // special case for JSONP :S
+  method = method.toLowerCase() === 'jsonp' ? 'GET' : method;
+
   return function () {
     var NO_REQUEST_HEADERS = {},
       NO_REQUEST_DATA = 'NO_REQUEST_DATA',
@@ -159,7 +164,7 @@ function _angularHttpMethodTest(method) {
       locomocko.shouldMockAngular('mockModule');
 
       angular.injector(['mockModule']).invoke(function ($http) {
-        angularHttpMethod = $http[method.toLowerCase()];
+        angularHttpMethod = $http[angularMethod];
       });
     });
 

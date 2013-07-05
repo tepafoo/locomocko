@@ -216,6 +216,9 @@
             config.url = url;
             return http(config);
           };
+
+          http.jsonp = http.get;
+
           return http;
         }
       },
