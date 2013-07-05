@@ -83,7 +83,7 @@
 
     ZERO_LENGTH = 0,
     NOT_IN_ARRAY = -1,
-    EXPECTED_METHODS_ARRAY = ['GET', 'POST', 'PUT', 'DELETE'],
+    EXPECTED_METHODS_ARRAY = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
 
   // util methods
     isNullOrUndefined = function (object) {
@@ -206,6 +206,13 @@
           http.delete = function (url, config) {
             config = config || {};
             config.method = 'DELETE';
+            config.url = url;
+            return http(config);
+          };
+
+          http.head = function (url, config) {
+            config = config || {};
+            config.method = 'HEAD';
             config.url = url;
             return http(config);
           };
