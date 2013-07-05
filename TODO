@@ -14,9 +14,6 @@ Angular
 - angular:
   - implement http promise then() method
   - throw error if header() called with non-String type?
-  - implement following methods:
-    - $http.head
-    - $http.jsonp
   - edge cases:
     - only return first occurrence of a (key,value) pair in config object
     - throw error if transformRequest/transformResponse not functions
