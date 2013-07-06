@@ -182,40 +182,19 @@
             }
           };
 
-          http.get = function (url, config) {
-            config = config || {};
-            config.method = 'GET';
-            config.url = url;
-            return http(config);
-          };
+          var methods = ['get', 'post', 'put', 'delete', 'head'], i = 0;
 
-          http.post = function (url, config) {
-            config = config || {};
-            config.method = 'POST';
-            config.url = url;
-            return http(config);
-          };
-
-          http.put = function (url, config) {
-            config = config || {};
-            config.method = 'PUT';
-            config.url = url;
-            return http(config);
-          };
-
-          http.delete = function (url, config) {
-            config = config || {};
-            config.method = 'DELETE';
-            config.url = url;
-            return http(config);
-          };
-
-          http.head = function (url, config) {
-            config = config || {};
-            config.method = 'HEAD';
-            config.url = url;
-            return http(config);
-          };
+          for (i = 0; i < methods.length; i++) {
+            http[methods[i]] = (function () {
+              var method = methods[i];
+              return function (url, config) {
+                config = config || {};
+                config.method = method;
+                config.url = url;
+                return http(config);
+              };
+            })();
+          }
 
           http.jsonp = http.get;
 
