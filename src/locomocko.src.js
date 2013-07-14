@@ -10,8 +10,7 @@
 (function (window) {
 
   // constants
-  var SUPPORTED_LIBRARIES = ['jQuery', 'angular'],
-    NO_ANGULAR_MODULE = '',
+  var NO_ANGULAR_MODULE = '',
     STATUS_CODE_TO_TEXT = {
       100: 'Continue',
       101: 'Switching Protocols',
@@ -98,6 +97,14 @@
       return Object.prototype.toString.call(object) === '[object String]';
     },
 
+    isFunction = function (object) {
+      return Object.prototype.toString.call(object) === '[object Function]';
+    },
+
+    isArray = function (object) {
+      return Object.prototype.toString.call(object) === '[object Array]';
+    },
+
     hasArguments = function (input) {
       return input.length !== ZERO_LENGTH
     },
@@ -147,52 +154,67 @@
       },
       angularHttpProvider: {
         $get: function () {
-          var http = function (options) {
-            var response = libraryMocks.getResponse(options),
-              statusCode = response.getStatusCode(),
-              headers = response.getHeaders(),
-              isSuccess = function () {
-                return 200 <= statusCode && statusCode < 300;
-              },
-              headersFunction = function (header) {
-                if (isNullOrUndefined(header)) {
-                  return headers;
-                } else {
-                  return headers[header];
+          var i,
+            http = function (options) {
+              var response = libraryMocks.getResponse(options),
+                statusCode = response.getStatusCode(),
+                headers = response.getHeaders(),
+                data = response.getData(),
+                isSuccess = function () {
+                  return 200 <= statusCode && statusCode < 300;
+                },
+                headersFunction = function (header) {
+                  if (isNullOrUndefined(header)) {
+                    return headers;
+                  } else {
+                    return headers[header];
+                  }
+                },
+                toCall = function (callback) {
+                  callback(data, statusCode, headersFunction, options);
+                  return this;
+                },
+                noOperation = function () {
+                  return this;
+                },
+                thenCallbackArguments;
+
+              if (isFunction(options.transformResponse)) {
+                data = options.transformResponse(data, headersFunction);
+              }
+
+              if (isArray(options.transformResponse)) {
+                for (i = 0; i < options.transformResponse.length; i++) {
+                  data = options.transformResponse[i](data, headersFunction);
                 }
-              },
-              toCall = function (callback) {
-                callback(response.getData(), statusCode, headersFunction, options);
-                return this;
-              },
-              noOperation = function () {
-                return this;
-              },
+              }
+
+              // initialise the callback arguments only once the response data has been transformed
               thenCallbackArguments = {
-                data: response.getData(),
+                data: data,
                 status: statusCode,
                 headers: headersFunction,
                 config: options
               };
 
-            if (isSuccess()) {
-              return {
-                success: toCall,
-                error: noOperation,
-                then: function (successCallback, errorCallback) {
-                  successCallback(thenCallbackArguments);
-                }
-              };
-            } else {
-              return {
-                success: noOperation,
-                error: toCall,
-                then: function (successCallback, errorCallback) {
-                  errorCallback(thenCallbackArguments);
-                }
-              };
-            }
-          };
+              if (isSuccess()) {
+                return {
+                  success: toCall,
+                  error: noOperation,
+                  then: function (successCallback, errorCallback) {
+                    successCallback(thenCallbackArguments);
+                  }
+                };
+              } else {
+                return {
+                  success: noOperation,
+                  error: toCall,
+                  then: function (successCallback, errorCallback) {
+                    errorCallback(thenCallbackArguments);
+                  }
+                };
+              }
+            };
 
           var methods = ['get', 'post', 'put', 'delete', 'head'], i = 0;
 

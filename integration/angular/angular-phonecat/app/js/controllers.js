@@ -3,7 +3,10 @@
 /* Controllers */
 
 function PhoneListCtrl($scope, $http) {
-  var promise = $http.get('phones/phones.json');
+  var promise = $http({
+    url: 'phones/phones.json',
+    method: 'get'
+  });
   promise.success(function (data) {
     $scope.phones = data;
   });

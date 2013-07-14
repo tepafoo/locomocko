@@ -9,7 +9,6 @@
 - anyMethod()
 - do not mock again on multiple calls to shouldMock()
 Angular
-- request/response transforms?
 - throw error if header() called with non-String type?
 - edge cases:
     - only return first occurrence of a (key,value) pair in config object

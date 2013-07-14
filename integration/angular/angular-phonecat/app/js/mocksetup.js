@@ -1,7 +1,6 @@
 'use strict';
 
 locomocko.shouldMockAngular('PhoneCat');
-locomocko.whenUrl('phones/phones.json').withMethod('GET').thenRespond().withStatusCode(500);
 locomocko.whenUrl('phones/phones.json').withMethod('GET').thenRespond().withData([
   {
     "age": 0,
