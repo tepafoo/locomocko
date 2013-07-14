@@ -7,4 +7,4 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-describe('angular $http.put()', _angularHttpMethodTest('PUT'));
+describe('angular $http.get().success().error()', _angularHttpMethodTest('GET'));

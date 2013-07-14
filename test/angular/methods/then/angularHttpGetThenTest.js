@@ -7,4 +7,4 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-describe('angular $http.post()', _angularHttpMethodTest('POST'));
+describe('angular $http.get().then()', _angularHttpMethodThenTest('GET'));

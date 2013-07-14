@@ -7,4 +7,4 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-describe('angular $http.delete()', _angularHttpMethodTest('DELETE'));
+describe('angular $http.post().success().error()', _angularHttpMethodTest('POST'));

@@ -167,17 +167,29 @@
               },
               noOperation = function () {
                 return this;
+              },
+              thenCallbackArguments = {
+                data: response.getData(),
+                status: statusCode,
+                headers: headersFunction,
+                config: options
               };
 
             if (isSuccess()) {
               return {
                 success: toCall,
-                error: noOperation
+                error: noOperation,
+                then: function (successCallback, errorCallback) {
+                  successCallback(thenCallbackArguments);
+                }
               };
             } else {
               return {
                 success: noOperation,
-                error: toCall
+                error: toCall,
+                then: function (successCallback, errorCallback) {
+                  errorCallback(thenCallbackArguments);
+                }
               };
             }
           };

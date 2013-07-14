@@ -5,15 +5,12 @@
 - JsLint
 - onError? (note: jqXHR responseText is a String)
 - only called once, on readyState 4?
-- shouldMock when library not present
 - $.ajax() currently only implemented with "options" object
 - anyMethod()
 - do not mock again on multiple calls to shouldMock()
 Angular
-- implement mocked $http with request/response transforms
-- angular:
-  - implement http promise then() method
-  - throw error if header() called with non-String type?
-  - edge cases:
+- request/response transforms?
+- throw error if header() called with non-String type?
+- edge cases:
     - only return first occurrence of a (key,value) pair in config object
     - throw error if transformRequest/transformResponse not functions
