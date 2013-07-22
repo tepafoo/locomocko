@@ -210,6 +210,24 @@ describe('jQuery.ajax()', function () {
         it('mocks jQuery.ajax() DELETE as expected thenRespond().withHeaders()', function (done) {
           mockJQueryAjaxResponseHeaders('DELETE', done);
         });
+
+        it('should return no data', function (done) {
+          var expectedUrl = 'someUrl',
+            method = 'GET';
+
+          locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withAnyData().thenRespond().withoutData();
+
+          // when and then
+          $.ajax({
+            url: expectedUrl,
+            type: method,
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+              data.should.equal('');
+              done();
+            }
+          });
+        });
       });
 
       describe('withHeaders() withAnyData()', function () {

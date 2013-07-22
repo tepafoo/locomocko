@@ -80,6 +80,8 @@
     NO_DATA = 'LOCO_MOCKO_NO_DATA',
     ANY_DATA = 'LOCO_MOCKO_ANY_DATA',
 
+    EMPTY_STRING = '',
+
     ZERO_LENGTH = 0,
     NOT_IN_ARRAY = -1,
     EXPECTED_METHODS_ARRAY = ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
@@ -290,7 +292,7 @@
     };
 
   function MockedResponse() {
-    this._data = NO_DATA;
+    this._resetData();
     this._headers = {};
     this._statusCode = 200;
   }
@@ -301,6 +303,10 @@
       this._data = data;
 
       return this;
+    },
+
+    withoutData: function () {
+      this._resetData();
     },
 
     withHeaders: function (headers) {
@@ -320,6 +326,10 @@
         throw getIllegalArgumentError();
       }
 
+      if (this._data === NO_DATA) {
+        return EMPTY_STRING;
+      }
+
       return this._data;
     },
 
@@ -329,6 +339,10 @@
 
     getStatusCode: function () {
       return this._statusCode;
+    },
+
+    _resetData: function () {
+      this._data = NO_DATA;
     }
   };
 

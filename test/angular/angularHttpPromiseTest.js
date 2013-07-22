@@ -2513,5 +2513,29 @@ describe('angular $http().success().error()', function () {
         });
       });
     });
+
+    it('should return no data', function (done) {
+      var expectedUrl = 'someUrl',
+        method = 'GET';
+      locomocko.whenUrl(expectedUrl).withMethod(method).withAnyHeaders().withAnyData().thenRespond().withoutData();
+
+      // when and then
+      angularHttp({
+        url: expectedUrl,
+        method: method,
+        headers: {'any': 'headers'}
+      }).
+        success(function (data, status, headers, config) {
+
+          data.should.equal('');
+          done();
+        }).
+        error(function (data, status, headers, config) {
+          // fail if execution comes to this point
+          false.should.be.true;
+
+          done();
+        });
+    });
   });
 });
