@@ -166,9 +166,9 @@
                 headersFunction = function (header) {
                   if (isNullOrUndefined(header)) {
                     return headers;
-                  } else {
-                    return headers[header];
                   }
+
+                  return headers[header];
                 },
                 toCall = function (callback) {
                   callback(data, statusCode, headersFunction, options);
