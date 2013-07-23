@@ -3,11 +3,6 @@ locomocko
 
 locomocko is a JavaScript library that mocks responses from your back-end server. It works with jQuery and Angular JS.
 
-Why use it?
-------------------
-
-Use this library if you need to simulate interaction with your back-end server.
-
 How to use it?
 ---------------------
 <b>Overview</b>
@@ -135,6 +130,11 @@ Usage examples
     locomocko.whenUrl('someUrl').withMethod('GET').thenRespond().withData('Not good!').withStatusCode(500);
 
     // etc.
+
+Version
+-----------
+
+The latest version is 0.0.1
 
 Licence
 -----------
