@@ -91,21 +91,19 @@
       return typeof object === 'undefined' || object === null;
     },
 
-    isObject = function (object) {
-      return Object.prototype.toString.call(object) === '[object Object]';
+    isOfType = function (typeToString) {
+      return function (other) {
+        return Object.prototype.toString.call(other) === typeToString;
+      }
     },
 
-    isString = function (object) {
-      return Object.prototype.toString.call(object) === '[object String]';
-    },
+    isObject = isOfType('[object Object]'),
 
-    isFunction = function (object) {
-      return Object.prototype.toString.call(object) === '[object Function]';
-    },
+    isString = isOfType('[object String]'),
 
-    isArray = function (object) {
-      return Object.prototype.toString.call(object) === '[object Array]';
-    },
+    isFunction = isOfType('[object Function]'),
+
+    isArray = isOfType('[object Array]'),
 
     hasArguments = function (input) {
       return input.length !== ZERO_LENGTH
