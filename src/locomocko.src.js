@@ -216,6 +216,7 @@
               }
             };
 
+          // http.get(), http.post(), http.put(), http.delete(), http.head()
           var methods = ['get', 'post', 'put', 'delete', 'head'], i = 0;
 
           for (i = 0; i < methods.length; i++) {
