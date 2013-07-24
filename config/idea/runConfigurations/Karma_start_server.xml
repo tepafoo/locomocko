@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Karma start server" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/node" path-to-js-file="node_modules/karma/bin/karma" application-parameters="start" working-dir="$PROJECT_DIR$">
+  <configuration default="false" name="Karma start server" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/node" path-to-js-file="node_modules/karma/bin/karma" application-parameters="start" working-dir="$PROJECT_DIR$/test/runner">
     <envs>
       <env name="CHROME_BIN" value="/usr/bin/chromium-browser" />
       <env name="OPERA_BIN" value="/usr/bin/opera" />
