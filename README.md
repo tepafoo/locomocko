@@ -131,6 +131,12 @@ Usage examples
 
     // etc.
 
+
+Running the tests
+------------------
+
+See https://github.com/tepafoo/locomocko/wiki/Running-the-tests
+
 Version
 -----------
 
